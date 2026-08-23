@@ -2,30 +2,62 @@
 node_modules/
 .pnp
 .pnp.js
+.yarn/
+.pnpm-store/
+jspm_packages/
 
 # next
 .next/
 out/
 build/
 next-env.d.ts
+.swc/
 
-# env
+# env (TÜM env dosyaları — sadece .env.example commit'lenir)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+.env.vault
+
+# secrets / sertifikalar
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.jks
+*.keystore
+secrets/
+credentials.json
+service-account*.json
+gha-creds-*.json
+
+# veritabanı (yerel geliştirme)
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+prisma/dev.db*
+prisma/*.db*
 
 # testing
 coverage/
 playwright-report/
 test-results/
 .playwright/
+blob-report/
+.nyc_output/
 
 # misc
 .DS_Store
-*.pem
 *.tsbuildinfo
 .vercel
 .turbo
+.netlify/
+.serverless/
+.eslintcache
+.stylelintcache
 
 # uploads (yerel geliştirme fallback storage)
 public/uploads/
@@ -36,30 +68,46 @@ docs/
 # IDE / editor
 .vscode/
 .idea/
+.fleet/
+.zed/
+*.swp
+*.swo
+*~
+
+# AI / agent araçları (yerel)
+.claude/settings.local.json
+.aider*
+.cursor/
 
 # logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+.node_repl_history
 
 # caches / temp
 .cache/
 .parcel-cache/
 dist/
 .output/
+storybook-static/
+.contentlayer/
 
 # OS / temp
 Thumbs.db
+ehthumbs.db
 desktop.ini
 tmp/
 temp/
-
-# generic logs
-*.log
-
-# coverage / tooling
-.nyc_output/
+*.bak
+*.orig
+*.rej
+*.tgz
 
 # local tools
 .envrc
 .localhistory/
+.history/
