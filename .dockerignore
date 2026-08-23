@@ -1,0 +1,63 @@
+# ---------------------------------------------------------------------------
+# Docker build context'ine GİRMEMESİ gerekenler.
+#
+# Kritik: builder aşamasındaki `COPY . .`, `COPY --from=deps` ile kurulan
+# Linux node_modules'ünü host'un (macOS/Windows) node_modules'üyle EZER.
+# @node-rs/argon2 ve Prisma engine'leri platforma özgü native binary'ler
+# olduğu için imaj bozulur. node_modules bu yüzden mutlaka hariç tutulmalı.
+# ---------------------------------------------------------------------------
+node_modules
+.next
+out
+build
+dist
+
+# secrets — imaja hiçbir env dosyası girmemeli, runtime'da env_file ile verilir
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# yerel yükleme fallback'i (production'da S3 veya named volume kullanılır)
+public/uploads
+
+# git / CI
+.git
+.gitignore
+.github
+
+# test & tooling
+tests
+e2e
+test-results
+playwright-report
+blob-report
+coverage
+.nyc_output
+playwright.config.ts
+vitest.config.mts
+eslint.config.mjs
+.prettierrc
+
+# dokümantasyon & geliştirici dosyaları
+docs
+images
+README.md
+AGENTS.md
+CLAUDE.md
+Dockerfile
+docker-compose.yml
+
+# IDE / OS / cache
+.vscode
+.idea
+.DS_Store
+*.log
+*.tsbuildinfo
+.turbo
+.cache
+.swc

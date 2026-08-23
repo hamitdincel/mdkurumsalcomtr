@@ -4,17 +4,23 @@ services:
     container_name: drone_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: drone
-      POSTGRES_PASSWORD: drone
-      POSTGRES_DB: drone
+      POSTGRES_USER: ${POSTGRES_USER:-drone}
+      # Production'da .env üzerinden MUTLAKA güçlü bir parola verin.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-drone}
+      POSTGRES_DB: ${POSTGRES_DB:-drone}
     ports:
+      # Yalnızca loopback'e bağlanır. Aksi halde VPS'te Postgres doğrudan
+      # internete açılır — varsayılan parolayla birlikte kritik risktir.
       # Makinede zaten çalışan bir PostgreSQL varsa çakışmasın diye 5433.
-      # DB_PORT ile değiştirilebilir.
-      - '${DB_PORT:-5433}:5432'
+      - '127.0.0.1:${DB_PORT:-5433}:5432'
     volumes:
       - drone_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U drone -d drone']
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-drone} -d ${POSTGRES_DB:-drone}',
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -26,6 +32,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # NEXT_PUBLIC_* değerleri build sırasında bundle'a gömülür; aşağıdaki
+      # env_file/environment blokları yalnızca RUNTIME için geçerlidir.
+      # Değerler compose tarafından ./.env dosyasından okunur.
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?docker build icin .env dosyasinda NEXT_PUBLIC_SITE_URL tanimli olmali}
+        NEXT_PUBLIC_MEDIA_HOSTNAMES: ${NEXT_PUBLIC_MEDIA_HOSTNAMES:-}
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-}
+        NEXT_PUBLIC_GA_MEASUREMENT_ID: ${NEXT_PUBLIC_GA_MEASUREMENT_ID:-}
+        NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
+        NEXT_PUBLIC_META_PIXEL_ID: ${NEXT_PUBLIC_META_PIXEL_ID:-}
+        NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION:-}
     container_name: drone_app
     restart: unless-stopped
     depends_on:
@@ -34,9 +51,16 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://drone:drone@db:5432/drone?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-drone}:${POSTGRES_PASSWORD:-drone}@db:5432/${POSTGRES_DB:-drone}?schema=public
+    volumes:
+      # STORAGE_DRIVER=local ise yüklenen görseller burada kalıcı olur.
+      # Production'da S3/R2 önerilir (STORAGE_DRIVER=s3); bu volume yalnızca
+      # local sürücüyle çalışıldığında container restart'ında veri kaybını
+      # önlemek içindir.
+      - drone_uploads:/app/public/uploads
     ports:
       - '3000:3000'
 
 volumes:
   drone_pgdata:
+  drone_uploads:
