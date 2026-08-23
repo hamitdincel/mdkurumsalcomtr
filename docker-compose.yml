@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: drone_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: drone
+      POSTGRES_PASSWORD: drone
+      POSTGRES_DB: drone
+    ports:
+      # Makinede zaten çalışan bir PostgreSQL varsa çakışmasın diye 5433.
+      # DB_PORT ile değiştirilebilir.
+      - '${DB_PORT:-5433}:5432'
+    volumes:
+      - drone_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U drone -d drone']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Uygulama container'ı yalnızca VPS/Plesk senaryosunda kullanılır.
+  # Vercel deployment'ında bu servise gerek yoktur.
+  app:
+    profiles: ['app']
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: drone_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://drone:drone@db:5432/drone?schema=public
+    ports:
+      - '3000:3000'
+
+volumes:
+  drone_pgdata:

@@ -1,0 +1,969 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   DESIGN SYSTEM — "industrial technology + clean architecture + premium B2B"
+   ==========================================================================
+
+   MİMARİ
+   ------
+   1. HAM TEMA DEĞERLERİ  (--t-*)  → :root / [data-theme] altında, temaya göre
+                                     değişir. Tek gerçek kaynak burasıdır.
+   2. TAILWIND TOKEN'LARI (--color-*) → @theme inline ile --t-* değişkenlerine
+                                     bağlanır. `bg-surface`, `text-ink` gibi
+                                     yardımcı sınıflar buradan üretilir.
+
+   Bu ayrım sayesinde tek bir `data-theme` özniteliği tüm siteyi ve paneli
+   çevirir; bileşenlerde `dark:` varyantı yazmaya gerek kalmaz.
+
+   KURAL: Bileşenlerde ham hex değeri kullanılmaz.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. HAM TEMA DEĞERLERİ — AÇIK TEMA (varsayılan)
+   --------------------------------------------------------------------------
+   "Tinted architectural": saf beyaz zemin yoktur. Sayfa soğuk grafit-mavi
+   tonundadır; beyaz yalnızca en üst katmana (modal, popover) ayrılmıştır.
+   Bu, yüzeyler arasında gerçek bir derinlik merdiveni kurar.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* --- Yüzey merdiveni: sunken → surface → raised → overlay -------------- */
+  --t-surface-sunken: #e4e7ec; /* kuyu: input, tablo başlığı, iç girinti */
+  --t-surface: #eceef2; /* sayfa zemini — nötr, beyaz değil */
+  --t-surface-raised: #f6f7f9; /* kart / panel — zeminden AZ ayrışır */
+  --t-surface-overlay: #ffffff; /* modal, popover, dropdown — en üst katman */
+
+  /* Marka tonlu yüzey — üçüncü ritim katmanı */
+  --t-surface-tint: #e8ecf5;
+  --t-surface-tint-strong: #dfe6f2;
+
+  /*
+   * KONTRAST YÜZEYLER (.section-dark / .section-deep)
+   * Sayfa zemininden en çok ayrışan katman. YÖN TEMAYA GÖRE DEĞİŞİR:
+   *   açık temada  → en aydınlık yüzey (beyaz)
+   *   koyu temada  → en koyu yüzey (grafit)
+   * Eskiden her iki temada da koyu kalıyordu; açık temada sayfanın ortasında
+   * siyah bantlar oluşturduğu için temaya bağlandı.
+   */
+  --t-surface-inverse: #ffffff;
+  --t-surface-inverse-raised: #f1f4f9;
+  --t-surface-deep: #ffffff;
+
+  /* Kontrast yüzeylerin metin ve çizgi renkleri de aynı yönde döner */
+  --t-ink-inverse: #0d1116;
+  --t-ink-inverse-muted: #4b5560;
+  --t-line-inverse: #d1d9e3;
+
+  /* --- Metin ------------------------------------------------------------- */
+  --t-ink: #171b20; /* ana metin — saf siyah DEĞİL, göz yormaz */
+  --t-ink-muted: #4e565f; /* ikincil (AA) */
+  --t-ink-subtle: #5d656e; /* üçüncül / meta — en koyu açık zeminde de AA */
+
+  /* --- Çizgi ------------------------------------------------------------- */
+  --t-line: #dee1e6;
+  --t-line-strong: #c3c8d0;
+  --t-line-subtle: #e7e9ee;
+
+  /* --- Marka rampası ----------------------------------------------------- */
+  --t-brand-50: #eaf1ff;
+  --t-brand-100: #d3e2ff;
+  --t-brand-200: #a9c5ff;
+  --t-brand-300: #74a1ff;
+  --t-brand-400: #3d79ff;
+  --t-brand-500: #1155f0; /* ana accent */
+  --t-brand-600: #0a44c9;
+  --t-brand-700: #0a37a0;
+  --t-brand-800: #0c2f7f;
+  --t-brand-900: #0e2a66;
+
+  /*
+   * EYLEM RENGİ (buton dolgusu) marka rampasından AYRI tutulur.
+   * Sebep: koyu temada rampa ters çevrilir ve brand-500 parlak maviye döner;
+   * parlak mavi üzerinde beyaz metin AA kontrastını geçemez. Dolgu rengi
+   * bu yüzden her iki temada da beyaz metni taşıyacak kadar koyu kalır.
+   */
+  --t-action: #1155f0;
+  --t-action-hover: #0a44c9;
+  --t-action-active: #0a37a0;
+  --t-on-action: #ffffff;
+
+  /* İkincil teknik vurgu */
+  --t-signal-soft: #d9f4f7;
+
+  /* --- Durum ------------------------------------------------------------- */
+  --t-success: #0f7a4a;
+  --t-success-soft: #d9f2e5;
+  --t-warning: #8a5600;
+  --t-warning-soft: #fbeed5;
+  --t-danger: #b3261e;
+  --t-danger-soft: #fbe1de;
+  --t-info: #0a44c9;
+  --t-info-soft: #e0eafc;
+
+  /* --- Gölge — düşük, mimari, yayılmayan --------------------------------- */
+  --t-shadow-xs: 0 1px 1px 0 rgb(13 17 22 / 0.04);
+  --t-shadow-sm: 0 1px 2px 0 rgb(13 17 22 / 0.05);
+  --t-shadow-md: 0 2px 6px -2px rgb(13 17 22 / 0.06);
+  --t-shadow-lg: 0 6px 16px -6px rgb(13 17 22 / 0.09);
+  --t-shadow-xl: 0 14px 32px -12px rgb(13 17 22 / 0.12);
+
+  /* Kart üst kenarındaki ışık çizgisi — hacim hissi verir */
+  --t-edge-highlight: transparent; /* kart üst kenar ışığı kaldırıldı */
+  /* Doku yoğunluğu (grain / dot matrix) */
+  --t-texture-color: rgb(13 17 22 / 0.035);
+  --t-grain-opacity: 0.02;
+  /* Kaydırma çubuğu */
+  --t-scroll-thumb: #b8c3d1;
+}
+
+/* ==========================================================================
+   1b. KOYU TEMA — sistem tercihi (kullanıcı açıkça "light" seçmediyse)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --t-surface-sunken: #101316;
+    --t-surface: #15181c;
+    --t-surface-raised: #1b1f24;
+    --t-surface-overlay: #23272d;
+
+    --t-surface-tint: #171d28;
+    --t-surface-tint-strong: #1c2432;
+
+    --t-surface-inverse: #0d1013;
+    --t-surface-inverse-raised: #161a1f;
+    --t-surface-deep: #0a0d10;
+
+    --t-ink-inverse: #e6e9ed;
+    --t-ink-inverse-muted: #9aa2ac;
+    --t-line-inverse: #272c33;
+
+    --t-ink: #e6e9ed;
+    --t-ink-muted: #9aa2ac;
+    --t-ink-subtle: #8a929c;
+
+    --t-line: #272c33;
+    --t-line-strong: #383e46;
+    --t-line-subtle: #1e2228;
+
+    /* Rampa ters çevrilir: bg-brand-50 koyu lacivert, text-brand-700 açık mavi
+       olur. Böylece rozet/aktif menü desenleri bileşen değişmeden çalışır. */
+    --t-brand-50: #0f1d3d;
+    --t-brand-100: #142a55;
+    --t-brand-200: #1b3a76;
+    --t-brand-300: #2452a5;
+    --t-brand-400: #3a74dd;
+    --t-brand-500: #4d8bff;
+    --t-brand-600: #7ba8ff;
+    --t-brand-700: #a8c6ff;
+    --t-brand-800: #cbdeff;
+    --t-brand-900: #e6f0ff;
+
+    --t-action: #2563eb;
+    --t-action-hover: #316ded;
+    --t-action-active: #1d4fd7;
+    --t-on-action: #ffffff;
+
+    --t-signal-soft: #08323a;
+
+    --t-success: #3ddc97;
+    --t-success-soft: #06281a;
+    --t-warning: #f0b03f;
+    --t-warning-soft: #2c1f06;
+    --t-danger: #ff6f61;
+    --t-danger-soft: #2e1210;
+    --t-info: #7ba8ff;
+    --t-info-soft: #0f1d3d;
+
+    --t-shadow-xs: 0 1px 1px 0 rgb(0 0 0 / 0.25);
+    --t-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --t-shadow-md: 0 2px 6px -2px rgb(0 0 0 / 0.35);
+    --t-shadow-lg: 0 6px 16px -6px rgb(0 0 0 / 0.45);
+    --t-shadow-xl: 0 14px 32px -12px rgb(0 0 0 / 0.55);
+
+    --t-edge-highlight: transparent;
+    --t-texture-color: rgb(255 255 255 / 0.032);
+    --t-grain-opacity: 0.028;
+    --t-scroll-thumb: #2c3742;
+  }
+}
+
+/* ==========================================================================
+   1c. KOYU TEMA — açık seçim (her zaman kazanır)
+   ========================================================================== */
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --t-surface-sunken: #101316;
+  --t-surface: #15181c;
+  --t-surface-raised: #1b1f24;
+  --t-surface-overlay: #23272d;
+
+  --t-surface-tint: #171d28;
+  --t-surface-tint-strong: #1c2432;
+
+  --t-surface-inverse: #0d1013;
+  --t-surface-inverse-raised: #161a1f;
+  --t-surface-deep: #0a0d10;
+
+  --t-ink-inverse: #e6e9ed;
+  --t-ink-inverse-muted: #9aa2ac;
+  --t-line-inverse: #272c33;
+
+  --t-ink: #e6e9ed;
+  --t-ink-muted: #9aa2ac;
+  --t-ink-subtle: #8a929c;
+
+  --t-line: #272c33;
+  --t-line-strong: #383e46;
+  --t-line-subtle: #1e2228;
+
+  --t-brand-50: #0f1d3d;
+  --t-brand-100: #142a55;
+  --t-brand-200: #1b3a76;
+  --t-brand-300: #2452a5;
+  --t-brand-400: #3a74dd;
+  --t-brand-500: #4d8bff;
+  --t-brand-600: #7ba8ff;
+  --t-brand-700: #a8c6ff;
+  --t-brand-800: #cbdeff;
+  --t-brand-900: #e6f0ff;
+
+  --t-action: #2563eb;
+  --t-action-hover: #316ded;
+  --t-action-active: #1d4fd7;
+  --t-on-action: #ffffff;
+
+  --t-signal-soft: #08323a;
+
+  --t-success: #3ddc97;
+  --t-success-soft: #06281a;
+  --t-warning: #f0b03f;
+  --t-warning-soft: #2c1f06;
+  --t-danger: #ff6f61;
+  --t-danger-soft: #2e1210;
+  --t-info: #7ba8ff;
+  --t-info-soft: #0f1d3d;
+
+  --t-shadow-xs: 0 1px 1px 0 rgb(0 0 0 / 0.25);
+  --t-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --t-shadow-md: 0 2px 6px -2px rgb(0 0 0 / 0.35);
+  --t-shadow-lg: 0 6px 16px -6px rgb(0 0 0 / 0.45);
+  --t-shadow-xl: 0 14px 32px -12px rgb(0 0 0 / 0.55);
+
+  --t-edge-highlight: transparent;
+  --t-texture-color: rgb(255 255 255 / 0.032);
+  --t-grain-opacity: 0.028;
+  --t-scroll-thumb: #2c3742;
+}
+
+/* ==========================================================================
+   2. TAILWIND TOKEN'LARI — temaya bağlı
+   --------------------------------------------------------------------------
+   `inline` kullanılır: üretilen yardımcı sınıf değeri doğrudan --t-* değişkenine
+   bakar, böylece tema değişince ekstra katman olmadan yeniden hesaplanır.
+   ========================================================================== */
+
+@theme inline {
+  /* --- Yüzeyler ---------------------------------------------------------- */
+  --color-surface: var(--t-surface);
+  --color-surface-raised: var(--t-surface-raised);
+  --color-surface-sunken: var(--t-surface-sunken);
+  --color-surface-overlay: var(--t-surface-overlay);
+  --color-surface-tint: var(--t-surface-tint);
+  --color-surface-tint-strong: var(--t-surface-tint-strong);
+  --color-surface-inverse: var(--t-surface-inverse);
+  --color-surface-inverse-raised: var(--t-surface-inverse-raised);
+  --color-surface-deep: var(--t-surface-deep);
+  --color-ink-inverse: var(--t-ink-inverse);
+  --color-ink-inverse-muted: var(--t-ink-inverse-muted);
+  --color-line-inverse: var(--t-line-inverse);
+
+  /* --- Metin ------------------------------------------------------------- */
+  --color-ink: var(--t-ink);
+  --color-ink-muted: var(--t-ink-muted);
+  --color-ink-subtle: var(--t-ink-subtle);
+
+  /* --- Çizgi ------------------------------------------------------------- */
+  --color-line: var(--t-line);
+  --color-line-strong: var(--t-line-strong);
+  --color-line-subtle: var(--t-line-subtle);
+
+  /* --- Marka ------------------------------------------------------------- */
+  --color-brand-50: var(--t-brand-50);
+  --color-brand-100: var(--t-brand-100);
+  --color-brand-200: var(--t-brand-200);
+  --color-brand-300: var(--t-brand-300);
+  --color-brand-400: var(--t-brand-400);
+  --color-brand-500: var(--t-brand-500);
+  --color-brand-600: var(--t-brand-600);
+  --color-brand-700: var(--t-brand-700);
+  --color-brand-800: var(--t-brand-800);
+  --color-brand-900: var(--t-brand-900);
+
+  --color-action: var(--t-action);
+  --color-action-hover: var(--t-action-hover);
+  --color-action-active: var(--t-action-active);
+  --color-on-action: var(--t-on-action);
+
+  --color-signal-soft: var(--t-signal-soft);
+
+  /* --- Durum ------------------------------------------------------------- */
+  --color-success: var(--t-success);
+  --color-success-soft: var(--t-success-soft);
+  --color-warning: var(--t-warning);
+  --color-warning-soft: var(--t-warning-soft);
+  --color-danger: var(--t-danger);
+  --color-danger-soft: var(--t-danger-soft);
+  --color-info: var(--t-info);
+  --color-info-soft: var(--t-info-soft);
+
+  /* --- Gölge ------------------------------------------------------------- */
+  --shadow-xs: var(--t-shadow-xs);
+  --shadow-sm: var(--t-shadow-sm);
+  --shadow-md: var(--t-shadow-md);
+  --shadow-lg: var(--t-shadow-lg);
+  --shadow-xl: var(--t-shadow-xl);
+}
+
+/* ==========================================================================
+   3. TEMADAN BAĞIMSIZ TOKEN'LAR
+   --------------------------------------------------------------------------
+   Kalıcı koyu bölümlerin metin renkleri ve "her zaman beyaz kağıt" yüzeyleri.
+   Bunlar tema değişse de sabit kalır; aksi halde fotoğraf üzerindeki metin
+   veya beyaz tutamaç okunamaz hale gelirdi.
+   ========================================================================== */
+
+@theme {
+  /*
+   * SABİT KOYU AİLE ("onyx")
+   * ------------------------------------------------------------------
+   * Temayla DÖNMEYEN koyu yüzey ve üzerindeki metin renkleri. İki yerde
+   * kullanılır:
+   *   1) Fotoğraf/video zeminleri — bir görselin üstü her iki temada da
+   *      karanlıktır, dolayısıyla üzerindeki metin her zaman açıktır.
+   *   2) Yönetim paneli kabuğu — sidebar bilinçli olarak sabit grafittir.
+   *
+   * Bölüm YÜZEYLERİ için bunlar KULLANILMAZ; onlar `surface-inverse` /
+   * `ink-inverse` kullanır ve temayla birlikte döner.
+   */
+  /*
+   * WHATSAPP MARKA RENKLERİ — sabittir, temayla dönmez ve marka rampasından
+   * ayrıdır. Metin rengi bilinçli olarak KOYU seçilmiştir: marka yeşili
+   * (#25d366) üzerinde beyaz metin 2.0:1'de kalır ve WCAG AA'yı geçemez;
+   * koyu metin 9.3:1 verir.
+   */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1fbe5b;
+  --color-ink-on-whatsapp: #0b141a;
+
+  --color-onyx: #0b0e11;
+  --color-ink-on-dark: #ffffff;
+  --color-ink-on-dark-muted: #9aa7b1;
+  --color-line-on-dark: rgb(255 255 255 / 0.22);
+
+  --color-paper: #ffffff; /* her zaman beyaz yüzey */
+  --color-ink-on-paper: #0d1116; /* beyaz yüzey üstündeki metin */
+
+  /*
+   * SCRIM — fotoğraf ve video üzerindeki okunabilirlik karartması, modal
+   * arka planı, görsel üstündeki etiket zeminleri.
+   *
+   * Bilinçli olarak temayla DÖNMEZ: bir fotoğrafın üzerindeki metin her iki
+   * temada da beyazdır, dolayısıyla karartma da her iki temada koyu kalmak
+   * zorundadır. Burada `ink` kullanılsaydı koyu temada gradyan beyaza döner
+   * ve görsel üstündeki metin okunamaz hale gelirdi.
+   */
+  --color-scrim: #06080a;
+
+  /*
+   * SIGNAL — ikincil teknik vurgu (hotspot, kart numarası, aktif menü çubuğu).
+   *
+   * Bu da temayla DÖNMEZ, çünkü yalnızca kalıcı koyu yüzeylerin üstünde
+   * kullanılır: hero, teknoloji bölümü, fotoğraf kartları, panel sidebar'ı,
+   * footer. Bir ara açık zeminde okunsun diye koyu teal'e çevrilmişti; sonuç
+   * fotoğraf üstündeki numaraların okunamaması oldu. Açık zeminde teknik vurgu
+   * gerektiğinde `brand-600` kullanılır.
+   */
+  --color-signal: #00c2d1;
+  --color-signal-bright: #34e0ee;
+
+  /* --- TİPOGRAFİ --------------------------------------------------------- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale — 1.200 minor third tabanlı */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.375rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.625rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-3xl: 2.125rem;
+  --text-3xl--line-height: 2.375rem;
+  --text-4xl: 2.75rem;
+  --text-4xl--line-height: 2.9375rem;
+  --text-5xl: 3.5rem;
+  --text-5xl--line-height: 3.625rem;
+  --text-6xl: 4.5rem;
+  --text-6xl--line-height: 4.5rem;
+  --text-7xl: 5.5rem;
+  --text-7xl--line-height: 5.25rem;
+
+  /* Akışkan başlık ölçeği — yalnızca sinematik alanlarda */
+  /*
+   * Akışkan başlık ölçeği — sadeleştirilmiş.
+   * Önceki değerler masaüstünde 112px'e kadar çıkıyordu ve hero ekranı
+   * domine ediyordu. Hiyerarşi boyutla değil, boşluk ve ağırlıkla kurulur.
+   */
+  --text-hero: clamp(2.25rem, 5vw, 4.25rem); /* 36 → 68 */
+  --text-hero--line-height: 1.05;
+  --text-display: clamp(1.75rem, 3.2vw, 2.75rem); /* 28 → 44 */
+  --text-display--line-height: 1.15;
+  --text-metric: clamp(2.5rem, 4.5vw, 4rem); /* 40 → 64 */
+  --text-metric--line-height: 1.05;
+
+  /* --- SPACING (8px sistemi) --------------------------------------------- */
+  --spacing: 0.25rem;
+
+  /* --- RADIUS — mimari dil: düşük yuvarlaklık ---------------------------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 14px;
+
+  /* --- CONTAINER --------------------------------------------------------- */
+  --container-site: 1360px;
+  --container-prose: 68ch;
+
+  /* --- ANİMASYON --------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-fast: 140ms;
+  --duration-base: 240ms;
+  --duration-slow: 380ms;
+  --duration-slower: 550ms;
+}
+
+/* ==========================================================================
+   4. TEMEL KATMAN
+   ========================================================================== */
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+    background-color: var(--color-surface);
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tema geçişi: renk değişimi ani değil, kısa bir yumuşamayla olur.
+     Yalnızca yüzey/metin renkleri geçişe girer — layout hesabı etkilenmez. */
+  html[data-theme-ready] body,
+  html[data-theme-ready] body * {
+    transition:
+      background-color var(--duration-fast) var(--ease-in-out-soft),
+      border-color var(--duration-fast) var(--ease-in-out-soft),
+      color var(--duration-fast) var(--ease-in-out-soft);
+  }
+
+  /* Kullanıcı tema düğmesine bastığı an dışında geçiş çalışmaz
+     (sayfa yüklenirken renk kayması görünmesin diye). */
+  html:not([data-theme-ready]) body,
+  html:not([data-theme-ready]) body * {
+    transition: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.014em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /*
+   * Odak halkası rengi devralınan bir değişkenle taşınır.
+   * Koyu bölümler bunu parlak signal tonuna çevirir; o koyu bölümün İÇİNDEKİ
+   * açık yüzeyler (ör. koyu zemine oturan beyaz form kartı) ise marka tonuna
+   * geri döner. Sabit bir seçici zinciri yerine değişken kullanılmasının
+   * sebebi budur: iç içe yüzeylerde doğru renk kendiliğinden seçilir.
+   */
+  :root {
+    --focus-ring: var(--color-brand-500);
+  }
+
+  /* Açık yüzey bileşenleri odak rengini geri alır */
+  .panel,
+  .section-raised,
+  .section-sunken,
+  .section-brand {
+    --focus-ring: var(--color-brand-500);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background-color: var(--color-brand-500);
+    color: #fff;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+
+  /* Kaydırma çubuğu — koyu temada varsayılan açık çubuk sırıtır */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-sunken);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--t-scroll-thumb);
+    border: 3px solid var(--color-surface-sunken);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-line-strong);
+  }
+}
+
+/* ==========================================================================
+   5. YARDIMCI SINIFLAR
+   ========================================================================== */
+
+@layer components {
+  /* --- Düzen ------------------------------------------------------------- */
+
+  .container-site {
+    width: 100%;
+    margin-inline: auto;
+    max-width: var(--container-site);
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-site {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* --- Bölüm yüzeyleri --------------------------------------------------- */
+
+  /* Koyu bölüm — teknoloji / final CTA */
+  .section-dark {
+    background-color: var(--color-surface-inverse);
+    color: var(--color-ink-inverse);
+  }
+
+  /* En koyu yüzey */
+  .section-deep {
+    background-color: var(--color-surface-deep);
+    color: var(--color-ink-inverse);
+  }
+
+  /* Marka tonlu bölüm — açık/koyu arasında üçüncü ritim katmanı */
+  .section-brand {
+    background:
+      radial-gradient(120% 100% at 50% 0%, var(--color-surface-tint-strong), transparent 62%),
+      var(--color-surface-tint);
+  }
+
+  /* Yükseltilmiş bölüm — kart zemini genişliğinde bir band.
+     Üst kenarında ışık çizgisi taşır, böylece düz bir dikdörtgen gibi durmaz. */
+  .section-raised {
+    position: relative;
+    background-color: var(--color-surface-raised);
+  }
+
+  /* Not: Eskiden burada bir üst kenar hairline'ı vardı. Yüzey farkı zaten
+     ayrımı sağladığı için ikinci bir sinyal olarak kaldırıldı. */
+
+  /* Kuyu bölüm — en girintili açık yüzey, listeler/ızgaralar için */
+  .section-sunken {
+    background-color: var(--color-surface-sunken);
+  }
+
+  /* --- Derinlik ---------------------------------------------------------- */
+
+  /*
+   * Panel: kart yüzeyi.
+   *
+   * SADELEŞTİRİLDİ. Önce border + gölge + üst kenar ışığı birlikte
+   * kullanılıyordu; üç ayrı sinyal aynı anda "bu bir kart" dediği için arayüz
+   * kutulanmış ve yorucu görünüyordu. Artık ayrım TEK BİR ince border ile
+   * yapılır. Gölge, yalnızca gerçekten üst katmanda duran öğelerde
+   * (modal, dropdown) ayrıca eklenir.
+   */
+  .panel {
+    position: relative;
+    background-color: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+  }
+
+  /* Marka ışıltısı — koyu bölümlerde odak noktası oluşturur */
+  /*
+   * Işıltı yardımcıları. Kullanımları bilinçli olarak çok sınırlıdır —
+   * yalnızca koyu yüzeyde tek bir odak öğesi için. Yoğunluk düşürülmüştür.
+   */
+  .glow-brand {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-brand-500) 22%, transparent);
+  }
+
+  /* --- Doku -------------------------------------------------------------- */
+
+  /*
+   * Blueprint ızgara — teknik plan hissi.
+   * Çizgi rengi temaya duyarlıdır: açık temada koyu, koyu temada açık çizgi.
+   * (Sabit beyaz kullanıldığında açık zeminde tamamen görünmez oluyordu.)
+   */
+  .blueprint-grid {
+    background-image:
+      linear-gradient(to right, var(--t-texture-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--t-texture-color) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  /* Fotoğraf/video üzerinde kullanılan blueprint — her zaman açık çizgi */
+  .blueprint-grid-on-media {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* Açık yüzeylerde ızgara — temaya duyarlı, çok düşük yoğunluk */
+  .grid-texture {
+    background-image:
+      linear-gradient(to right, var(--t-texture-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--t-texture-color) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  /* Nokta matrisi */
+  .dot-matrix {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+
+  /*
+   * Film grenli doku. Büyük düz renk alanlarının "dijital ve boş" görünmesini
+   * engeller; özellikle koyu temada bant oluşumunu (banding) kırar.
+   * SVG feTurbulence tek seferlik ve ağsız üretilir.
+   */
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--t-grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Ölçüm/koordinat çizgisi */
+  .measure-line {
+    background-image: repeating-linear-gradient(to right, currentColor 0 1px, transparent 1px 8px);
+  }
+
+  /* --- Ayraçlar ---------------------------------------------------------- */
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-line-strong) 15%,
+      var(--color-line-strong) 85%,
+      transparent
+    );
+  }
+
+  .rule-accent {
+    height: 2px;
+    width: 3.5rem;
+    background: linear-gradient(to right, var(--color-brand-500), var(--color-signal));
+  }
+
+  /* --- Teknik dil -------------------------------------------------------- */
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--color-brand-600);
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 1.75rem;
+    height: 2px;
+    background: currentColor;
+  }
+
+  /*
+   * Kontrast bölümlerdeki eyebrow.
+   * Açık temada bu yüzeyler beyaza döndüğü için cyan okunmaz hale gelir;
+   * bu yüzden renk yalnızca koyu temada signal'e çevrilir.
+   */
+  :root[data-theme='dark'] :is(.section-dark, .section-deep) .eyebrow {
+    color: var(--color-signal-bright);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) :is(.section-dark, .section-deep) .eyebrow {
+      color: var(--color-signal-bright);
+    }
+  }
+
+  .tech-label {
+    font-family: var(--font-sans);
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Metin gövdesi ----------------------------------------------------- */
+
+  .prose-site {
+    max-width: var(--container-prose);
+    font-size: var(--text-lg);
+    line-height: 1.75;
+    color: var(--color-ink-muted);
+  }
+
+  .prose-site :is(h2, h3, h4) {
+    color: var(--color-ink);
+    margin-top: 2.5rem;
+    margin-bottom: 0.875rem;
+    scroll-margin-top: 7rem;
+  }
+
+  .prose-site h2 {
+    font-size: var(--text-2xl);
+    line-height: 1.25;
+  }
+
+  .prose-site h3 {
+    font-size: var(--text-xl);
+    line-height: 1.3;
+  }
+
+  .prose-site p {
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-site :is(ul, ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .prose-site ul {
+    list-style: disc;
+  }
+
+  .prose-site ol {
+    list-style: decimal;
+  }
+
+  .prose-site a {
+    color: var(--color-brand-600);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose-site a:hover {
+    color: var(--color-brand-700);
+  }
+
+  .prose-site strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .prose-site blockquote {
+    border-left: 3px solid var(--color-brand-500);
+    padding-left: 1.25rem;
+    font-style: italic;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-site img {
+    border-radius: var(--radius-lg);
+    margin-block: 2rem;
+  }
+
+  .prose-site code {
+    background: var(--color-surface-sunken);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.9em;
+  }
+}
+
+/* ==========================================================================
+   6. ANİMASYON
+   ========================================================================== */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 48s linear infinite;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.04);
+  }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 24s var(--ease-in-out-soft) forwards;
+}
+
+@keyframes mask-wipe {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes line-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.32s var(--ease-out-quint) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee,
+  .animate-slow-zoom {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   7. YAZDIRMA — teklif/proje sayfalarının çıktısı
+   ========================================================================== */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}

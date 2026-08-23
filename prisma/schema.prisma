@@ -1,0 +1,543 @@
+// Drone Temizlik — Kurumsal Web Sitesi
+// Veri modeli: içerik yönetimi (CMS) + lead / CRM-lite + site ayarları
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// KULLANICI / YETKİ
+// ---------------------------------------------------------------------------
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  SALES
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         UserRole  @default(EDITOR)
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  assignedLeads Lead[]      @relation("LeadAssignee")
+  leadNotes     LeadNote[]
+  posts         Post[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+}
+
+// ---------------------------------------------------------------------------
+// TEKLİF TALEPLERİ (LEAD) / CRM-LITE
+// ---------------------------------------------------------------------------
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  DISCOVERY_SCHEDULED
+  OFFER_SENT
+  WON
+  LOST
+  SPAM
+}
+
+enum DirtLevel {
+  LIGHT
+  MEDIUM
+  HEAVY
+  UNKNOWN
+}
+
+enum Timeframe {
+  URGENT
+  WITHIN_MONTH
+  WITHIN_QUARTER
+  PLANNING
+}
+
+model Lead {
+  id          String  @id @default(uuid())
+  fullName    String
+  companyName String?
+  phone       String
+  email       String?
+  city        String
+
+  serviceId    String?
+  service      Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  serviceLabel String? // hizmet DB'de yoksa girilen serbest metin
+
+  buildingType    String?
+  estimatedArea   Int? // m²
+  estimatedHeight Int? // metre
+  floorCount      Int?
+  surfaceType     String?
+  dirtLevel       DirtLevel?
+  timeframe       Timeframe?
+  preferredDate   DateTime?
+  message         String?    @db.Text
+
+  status         LeadStatus @default(NEW)
+  assignedUserId String?
+  assignedUser   User?      @relation("LeadAssignee", fields: [assignedUserId], references: [id], onDelete: SetNull)
+
+  // Pazarlama / kaynak takibi
+  source      String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+  referrer    String?
+  landingPage String?
+
+  // KVKK
+  kvkkConsent    Boolean  @default(false)
+  kvkkConsentAt  DateTime
+  marketingOptIn Boolean  @default(false)
+
+  // Spam denetimi — ham IP saklanmaz, yalnızca tuzlanmış hash
+  ipHash      String?
+  userAgent   String?
+  isRead      Boolean @default(false)
+  spamScore   Int     @default(0)
+
+  attachments LeadAttachment[]
+  notes       LeadNote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([createdAt])
+  @@index([assignedUserId])
+  @@index([city])
+}
+
+model LeadAttachment {
+  id       String @id @default(cuid())
+  leadId   String
+  lead     Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  url      String
+  filename String
+  mimeType String
+  size     Int
+
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+}
+
+model LeadNote {
+  id     String  @id @default(cuid())
+  leadId String
+  lead   Lead    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  body   String  @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@index([leadId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// İÇERİK — HİZMETLER / SEKTÖRLER
+// ---------------------------------------------------------------------------
+
+model Service {
+  id               String  @id @default(cuid())
+  title            String
+  slug             String  @unique
+  shortDescription String  @db.Text
+  content          String? @db.Text
+  intro            String? @db.Text
+  heroImage        String?
+  icon             String?
+  active           Boolean @default(true)
+  featured         Boolean @default(false)
+  sortOrder        Int     @default(0)
+
+  // Yapılandırılmış içerik blokları (JSON) — avantajlar, yüzeyler, süreç adımları
+  advantages Json?
+  surfaces   Json?
+  processSteps Json?
+  problems   Json?
+
+  seoTitle        String?
+  metaDescription String? @db.Text
+  ogImage         String?
+
+  projects        Project[]
+  faqs            Faq[]
+  leads           Lead[]
+  beforeAfterSets BeforeAfterSet[]
+  sectors         SectorService[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+model Sector {
+  id               String  @id @default(cuid())
+  title            String
+  slug             String  @unique
+  shortDescription String  @db.Text
+  content          String? @db.Text
+  intro            String? @db.Text
+  heroImage        String?
+  icon             String?
+  active           Boolean @default(true)
+  sortOrder        Int     @default(0)
+
+  needs    Json?
+  approach Json?
+
+  seoTitle        String?
+  metaDescription String? @db.Text
+  ogImage         String?
+
+  projects Project[]
+  services SectorService[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+/// Hizmet <-> Sektör çoklu ilişkisi (ilgili hizmetler / ilgili sektörler blokları)
+model SectorService {
+  sectorId  String
+  serviceId String
+  sector    Sector  @relation(fields: [sectorId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([sectorId, serviceId])
+  @@index([serviceId])
+}
+
+// ---------------------------------------------------------------------------
+// PROJELER / VAKA ÇALIŞMALARI
+// ---------------------------------------------------------------------------
+
+model Project {
+  id         String  @id @default(cuid())
+  title      String
+  slug       String  @unique
+  clientName String? // gizliyse null bırakılır, sektör adı gösterilir
+  anonymized Boolean @default(false)
+  city       String
+
+  serviceId String?
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  sectorId  String?
+  sector    Sector?  @relation(fields: [sectorId], references: [id], onDelete: SetNull)
+
+  buildingType String?
+  surfaceType  String?
+  area         Int?
+  height       Int?
+  duration     String? // "3 gün" gibi — yalnızca gerçek veri girilir
+
+  summary   String  @db.Text
+  challenge String? @db.Text
+  solution  String? @db.Text
+  result    String? @db.Text
+
+  coverImage     String?
+  featured       Boolean   @default(false)
+  published      Boolean   @default(false)
+  completionDate DateTime?
+  sortOrder      Int       @default(0)
+
+  seoTitle        String?
+  metaDescription String? @db.Text
+  ogImage         String?
+
+  media           ProjectMedia[]
+  beforeAfterSets BeforeAfterSet[]
+  testimonial     Testimonial?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, featured, sortOrder])
+  @@index([serviceId])
+  @@index([sectorId])
+  @@index([city])
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  BEFORE
+  AFTER
+}
+
+model ProjectMedia {
+  id        String    @id @default(cuid())
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type      MediaType @default(IMAGE)
+  url       String
+  alt       String?
+  width     Int?
+  height    Int?
+  sortOrder Int       @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId, sortOrder])
+}
+
+model BeforeAfterSet {
+  id          String  @id @default(cuid())
+  title       String
+  description String? @db.Text
+  beforeImage String
+  afterImage  String
+  beforeAlt   String?
+  afterAlt    String?
+
+  buildingType String?
+  surfaceType  String?
+  city         String?
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  serviceId String?
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  active    Boolean @default(true)
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+// ---------------------------------------------------------------------------
+// GÜVEN UNSURLARI
+// ---------------------------------------------------------------------------
+
+/// Yalnızca gerçek müşteri logoları eklenir. Sahte referans kullanılmaz.
+model Reference {
+  id        String  @id @default(cuid())
+  name      String
+  logo      String
+  website   String?
+  sortOrder Int     @default(0)
+  active    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+/// Yalnızca gerçek, alınmış müşteri yorumları eklenir.
+model Testimonial {
+  id         String  @id @default(cuid())
+  personName String
+  company    String
+  jobTitle   String?
+  text       String  @db.Text
+  avatar     String?
+  logo       String?
+  active     Boolean @default(true)
+  sortOrder  Int     @default(0)
+
+  projectId String?  @unique
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+model Faq {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String  @db.Text
+  serviceId String?
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  sortOrder Int     @default(0)
+  active    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+  @@index([serviceId])
+}
+
+// ---------------------------------------------------------------------------
+// BLOG
+// ---------------------------------------------------------------------------
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String? @db.Text
+  sortOrder   Int     @default(0)
+
+  posts Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  posts PostTag[]
+
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id      String @id @default(cuid())
+  title   String
+  slug    String @unique
+  excerpt String @db.Text
+
+  /// TipTap JSON içerik
+  contentJson Json?
+  /// Sanitize edilmiş HTML render çıktısı (okuma performansı için)
+  contentHtml String? @db.Text
+
+  featuredImage String?
+  readingMinutes Int?    @default(0)
+
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+
+  authorId String?
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  tags PostTag[]
+
+  seoTitle        String?
+  metaDescription String? @db.Text
+  canonical       String?
+  ogImage         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([tagId])
+}
+
+// ---------------------------------------------------------------------------
+// MEDYA KÜTÜPHANESİ
+// ---------------------------------------------------------------------------
+
+model MediaAsset {
+  id       String  @id @default(cuid())
+  url      String
+  key      String  @unique
+  filename String
+  mimeType String
+  size     Int
+  width    Int?
+  height   Int?
+  alt      String?
+  folder   String? @default("genel")
+
+  createdAt DateTime @default(now())
+
+  @@index([folder, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// SİSTEM
+// ---------------------------------------------------------------------------
+
+/// Key-value site ayarları. Değerler JSON olarak saklanır.
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+/// Yayın öncesi/sonrası URL değişikliklerinde SEO kaybını önlemek için.
+model Redirect {
+  id         String  @id @default(cuid())
+  oldPath    String  @unique
+  newPath    String
+  statusCode Int     @default(301)
+  active     Boolean @default(true)
+  hits       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+}
+
+model AuditLog {
+  id       String  @id @default(cuid())
+  userId   String?
+  user     User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action   String // CREATE | UPDATE | DELETE | LOGIN | LOGIN_FAILED
+  entity   String
+  entityId String?
+  metadata Json?
+  ipHash   String?
+
+  createdAt DateTime @default(now())
+
+  @@index([entity, createdAt])
+  @@index([userId, createdAt])
+}
+
+/// Basit, veritabanı destekli rate limit sayacı (tek instance / küçük ölçek için).
+/// Yüksek trafikte Redis/Upstash tabanlı bir limiter tercih edilmelidir.
+model RateLimitEntry {
+  id        String   @id @default(cuid())
+  key       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([key, expiresAt])
+}
