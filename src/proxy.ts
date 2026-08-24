@@ -86,6 +86,6 @@ export const config = {
     /*
      * Statik dosyalar ve görsel optimizasyonu hariç tüm istekler.
      */
-    '/((?!_next/static|_next/image|favicon.ico|uploads|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|txt|xml|webmanifest)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|gallery|uploads|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|txt|xml|webmanifest)$).*)',
   ],
 }

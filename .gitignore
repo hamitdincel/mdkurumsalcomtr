@@ -59,7 +59,12 @@ blob-report/
 .eslintcache
 .stylelintcache
 
-# uploads (yerel geliştirme fallback storage)
+# Panelden yüklenen medya (STORAGE_DRIVER=local).
+# Yükleme hedefi her zaman bir alt klasördür:
+#   public/gallery/<klasör>/<YYYYAA>/<uuid>.<ext>
+# Bu yüzden yalnızca alt klasörler yok sayılır; public/gallery/ kökündeki
+# sabit görseller (ör. burhanbelirimza.png) versiyonlanmaya devam eder.
+public/gallery/*/
 public/uploads/
 
 # docs (repository'ye gönderilmesi gerekmeyen dokümanlar)

@@ -32,8 +32,9 @@ function getS3(): S3Client {
  * Dosyayı yapılandırılmış depolama sağlayıcısına yükler.
  *
  * - STORAGE_DRIVER=s3   → Cloudflare R2 / AWS S3 / MinIO
- * - STORAGE_DRIVER=local→ public/uploads (yalnızca geliştirme; production'da
- *   container yeniden başlatıldığında veri kaybolur)
+ * - STORAGE_DRIVER=local→ public/gallery (Next.js yalnızca public/ altını
+ *   servis ettiği için yüklenen dosyalar buraya yazılır; depo kökündeki bir
+ *   klasöre yazılsalardı hiçbir URL'den açılamazlardı)
  */
 export async function uploadFile(file: File, folder = 'genel'): Promise<StoredFile> {
   const key = buildObjectKey(folder, file)
@@ -62,12 +63,12 @@ export async function uploadFile(file: File, folder = 'genel'): Promise<StoredFi
     }
   }
 
-  const target = join(process.cwd(), 'public', 'uploads', key)
+  const target = join(process.cwd(), 'public', 'gallery', key)
   await mkdir(dirname(target), { recursive: true })
   await writeFile(target, buffer)
 
   return {
-    url: `/uploads/${key}`,
+    url: `/gallery/${key}`,
     key,
     filename: file.name,
     mimeType: file.type,
