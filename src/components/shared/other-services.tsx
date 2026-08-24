@@ -6,7 +6,7 @@ import { Icon } from './icon'
 import { MediaImage } from './media-image'
 import { Reveal, RevealItem } from './reveal'
 import { Button } from '@/components/ui/button'
-import { otherServiceGroups } from '@/config/content'
+import { securityServices } from '@/config/security'
 import { siteConfig } from '@/config/site'
 import { toTelHref } from '@/lib/utils'
 
@@ -59,7 +59,7 @@ export function OtherServices({
             <div className="panel flex w-full flex-col gap-3 rounded-md p-5 lg:max-w-sm">
               <div className="flex items-center gap-3">
                 {/* Açık levha: logonun koyu gövdesi koyu temada zemine karışmasın */}
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-sm bg-paper p-1">
+                <span className="bg-paper flex size-11 shrink-0 items-center justify-center rounded-sm p-1">
                   <Image
                     src={security.logo}
                     alt={`${security.brand} logosu`}
@@ -69,19 +69,19 @@ export function OtherServices({
                   />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-ink">{security.brand}</p>
-                  <p className="truncate text-xs text-ink-subtle">{security.name}</p>
+                  <p className="text-ink text-sm font-semibold">{security.brand}</p>
+                  <p className="text-ink-subtle truncate text-xs">{security.name}</p>
                 </div>
               </div>
 
-              <p className="text-xs leading-relaxed text-ink-muted">
+              <p className="text-ink-muted text-xs leading-relaxed">
                 Özel güvenlik ve elektronik güvenlik hizmetleri grup bünyesindeki bu şirket
                 tarafından, 5188 sayılı kanun kapsamında verilir.
               </p>
 
               <a
                 href={`tel:${toTelHref(security.phone)}`}
-                className="text-sm font-medium text-brand-600 underline-offset-4 hover:underline"
+                className="text-brand-600 text-sm font-medium underline-offset-4 hover:underline"
               >
                 {security.phone}
               </a>
@@ -91,10 +91,10 @@ export function OtherServices({
 
         <Reveal stagger className="mt-12">
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {otherServiceGroups.map((group) => (
-              <RevealItem as="li" key={group.id}>
-                <article className="group panel relative flex h-full flex-col overflow-hidden rounded-md transition-colors duration-300 hover:border-line-strong">
-                  <div className="relative aspect-[4/3] overflow-hidden bg-surface-sunken">
+            {securityServices.map((group) => (
+              <RevealItem as="li" key={group.slug}>
+                <article className="group panel hover:border-line-strong relative flex h-full flex-col overflow-hidden rounded-md transition-colors duration-300">
+                  <div className="bg-surface-sunken relative aspect-[4/3] overflow-hidden">
                     <MediaImage
                       src={group.image}
                       alt={group.title}
@@ -102,31 +102,31 @@ export function OtherServices({
                       className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                     />
                     {/* İkon rozeti görselin alt kenarına oturur, başlığa köprü kurar */}
-                    <span className="absolute bottom-3 left-3 flex size-10 items-center justify-center rounded-sm bg-paper text-brand-600 shadow-md">
+                    <span className="bg-paper text-brand-600 absolute bottom-3 left-3 flex size-10 items-center justify-center rounded-sm shadow-md">
                       <Icon name={group.icon} className="size-5" />
                     </span>
                   </div>
 
                   <div className="flex flex-1 flex-col gap-3 p-5">
-                    <h3 className="text-base leading-snug font-semibold text-ink">
+                    <h3 className="text-ink text-base leading-snug font-semibold">
                       {/*
                         after:inset-0 kartın TAMAMINI tıklanabilir yapar; ayrıca
                         bir bağlantı katmanı eklenmez, böylece ekran okuyucuda
                         tek ve anlamlı bir bağlantı kalır.
                       */}
                       <Link
-                        href={`/hizmetler/yeditepe-guvenlik#${group.id}`}
+                        href={`/hizmetler/yeditepe-guvenlik/${group.slug}`}
                         className="after:absolute after:inset-0"
                       >
                         {group.title}
                       </Link>
                     </h3>
 
-                    <p className="line-clamp-3 text-sm leading-relaxed text-ink-muted">
-                      {group.description}
+                    <p className="text-ink-muted line-clamp-3 text-sm leading-relaxed">
+                      {group.shortDescription}
                     </p>
 
-                    <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-brand-600">
+                    <span className="text-brand-600 mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium">
                       Detayları Gör
                       <ArrowUpRight
                         className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

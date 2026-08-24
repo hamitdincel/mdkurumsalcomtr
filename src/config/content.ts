@@ -9,8 +9,6 @@
  * her şey yalnızca admin panelinden gerçek veri girildiğinde gösterilir.
  */
 
-import { securityImages } from './images'
-
 export type StaticService = {
   slug: string
   title: string
@@ -62,12 +60,30 @@ export const staticServices: StaticService[] = [
           'Zemin ve giriş alanlarında kalıcı iskele yapısı kurulmadığı için sirkülasyon daha az kısıtlanır.',
       },
     ],
-    surfaces: ['Cam cephe', 'Kompozit panel', 'Alüminyum', 'Beton ve sıva', 'Seramik / granit kaplama'],
+    surfaces: [
+      'Cam cephe',
+      'Kompozit panel',
+      'Alüminyum',
+      'Beton ve sıva',
+      'Seramik / granit kaplama',
+    ],
     process: [
-      { title: 'Cephe değerlendirmesi', description: 'Yüzey türü, kirlilik seviyesi ve çevresel koşullar yerinde incelenir.' },
-      { title: 'Operasyon planı', description: 'Uçuş güzergâhı, güvenlik alanı ve su/çözelti planı hazırlanır.' },
-      { title: 'Uygulama', description: 'Pilot ve yer ekibi koordinasyonuyla temizlik kontrollü şekilde yapılır.' },
-      { title: 'Kontrol ve teslim', description: 'Sonuç birlikte incelenir, gerekli noktalarda düzeltme uygulanır.' },
+      {
+        title: 'Cephe değerlendirmesi',
+        description: 'Yüzey türü, kirlilik seviyesi ve çevresel koşullar yerinde incelenir.',
+      },
+      {
+        title: 'Operasyon planı',
+        description: 'Uçuş güzergâhı, güvenlik alanı ve su/çözelti planı hazırlanır.',
+      },
+      {
+        title: 'Uygulama',
+        description: 'Pilot ve yer ekibi koordinasyonuyla temizlik kontrollü şekilde yapılır.',
+      },
+      {
+        title: 'Kontrol ve teslim',
+        description: 'Sonuç birlikte incelenir, gerekli noktalarda düzeltme uygulanır.',
+      },
     ],
     seoTitle: 'Drone ile Dış Cephe Temizliği | Yüksek Yapılar için Kontrollü Uygulama',
     metaDescription:
@@ -88,17 +104,47 @@ export const staticServices: StaticService[] = [
       'Ofis kullanımını aksatmadan yapılması gereken periyodik temizlik',
     ],
     advantages: [
-      { title: 'Yüzeye uygun çözelti', description: 'Cam ve conta detaylarına uygun, yüzeyi aşındırmayan ürün seçimi yapılır.' },
-      { title: 'Saf su yaklaşımı', description: 'Mineral içeriği düşürülmüş su kullanımı, kuruma izlerinin azaltılmasını hedefler.' },
-      { title: 'Panel bazlı planlama', description: 'Cephe, panel ve kot bazında bölümlenerek sistematik ilerlenir.' },
-      { title: 'Kontrollü su kullanımı', description: 'Uygulama debisi yüzeye ve hava koşuluna göre ayarlanır.' },
+      {
+        title: 'Yüzeye uygun çözelti',
+        description: 'Cam ve conta detaylarına uygun, yüzeyi aşındırmayan ürün seçimi yapılır.',
+      },
+      {
+        title: 'Saf su yaklaşımı',
+        description:
+          'Mineral içeriği düşürülmüş su kullanımı, kuruma izlerinin azaltılmasını hedefler.',
+      },
+      {
+        title: 'Panel bazlı planlama',
+        description: 'Cephe, panel ve kot bazında bölümlenerek sistematik ilerlenir.',
+      },
+      {
+        title: 'Kontrollü su kullanımı',
+        description: 'Uygulama debisi yüzeye ve hava koşuluna göre ayarlanır.',
+      },
     ],
-    surfaces: ['Giydirme cam cephe', 'Isıcam üniteler', 'Kaplamalı (low-e) camlar', 'Alüminyum çerçeve detayları'],
+    surfaces: [
+      'Giydirme cam cephe',
+      'Isıcam üniteler',
+      'Kaplamalı (low-e) camlar',
+      'Alüminyum çerçeve detayları',
+    ],
     process: [
-      { title: 'Cam ve conta kontrolü', description: 'Yüzeydeki hasar, çizik ve conta durumu uygulama öncesi kayıt altına alınır.' },
-      { title: 'Test uygulaması', description: 'Küçük bir alanda test yapılarak çözelti ve debi doğrulanır.' },
-      { title: 'Bölüm bölüm uygulama', description: 'Cephe kot ve akslara bölünerek sırayla temizlenir.' },
-      { title: 'Son kontrol', description: 'Kuruma sonrası yüzey incelenir, gerekli noktalar tekrar edilir.' },
+      {
+        title: 'Cam ve conta kontrolü',
+        description: 'Yüzeydeki hasar, çizik ve conta durumu uygulama öncesi kayıt altına alınır.',
+      },
+      {
+        title: 'Test uygulaması',
+        description: 'Küçük bir alanda test yapılarak çözelti ve debi doğrulanır.',
+      },
+      {
+        title: 'Bölüm bölüm uygulama',
+        description: 'Cephe kot ve akslara bölünerek sırayla temizlenir.',
+      },
+      {
+        title: 'Son kontrol',
+        description: 'Kuruma sonrası yüzey incelenir, gerekli noktalar tekrar edilir.',
+      },
     ],
     seoTitle: 'Cam Cephe Temizliği | Giydirme Cephe için Profesyonel Uygulama',
     metaDescription:
@@ -119,17 +165,46 @@ export const staticServices: StaticService[] = [
       'Çatı üstü kurulumlarda erişim ve güvenlik zorlukları',
     ],
     advantages: [
-      { title: 'Panel yüzeyine uygun uygulama', description: 'Aşındırıcı olmayan yöntemlerle cam yüzey korunarak temizlik yapılır.' },
-      { title: 'Geniş sahalarda erişim', description: 'Sıra aralarına ve erişimi zor bölgelere yaklaşım kolaylaşır.' },
-      { title: 'Su kalitesi kontrolü', description: 'İz bırakmayı azaltmak için filtrelenmiş/saf su kullanımı planlanır.' },
-      { title: 'Üretici talimatına uyum', description: 'Panel üreticisinin bakım dokümanına uygun yöntem seçilir.' },
+      {
+        title: 'Panel yüzeyine uygun uygulama',
+        description: 'Aşındırıcı olmayan yöntemlerle cam yüzey korunarak temizlik yapılır.',
+      },
+      {
+        title: 'Geniş sahalarda erişim',
+        description: 'Sıra aralarına ve erişimi zor bölgelere yaklaşım kolaylaşır.',
+      },
+      {
+        title: 'Su kalitesi kontrolü',
+        description: 'İz bırakmayı azaltmak için filtrelenmiş/saf su kullanımı planlanır.',
+      },
+      {
+        title: 'Üretici talimatına uyum',
+        description: 'Panel üreticisinin bakım dokümanına uygun yöntem seçilir.',
+      },
     ],
-    surfaces: ['Monokristal paneller', 'Polikristal paneller', 'Çatı üstü kurulumlar', 'Arazi tipi GES sahaları'],
+    surfaces: [
+      'Monokristal paneller',
+      'Polikristal paneller',
+      'Çatı üstü kurulumlar',
+      'Arazi tipi GES sahaları',
+    ],
     process: [
-      { title: 'Saha ve panel envanteri', description: 'Panel tipi, dizilim ve erişim koşulları belirlenir.' },
-      { title: 'Bakım talimatı kontrolü', description: 'Üretici bakım gereklilikleri gözden geçirilir.' },
-      { title: 'Kontrollü temizlik', description: 'Uygun su ve yöntemle panel yüzeyleri temizlenir.' },
-      { title: 'Görsel kontrol', description: 'Temizlik sonrası yüzey ve bağlantı noktaları görsel olarak incelenir.' },
+      {
+        title: 'Saha ve panel envanteri',
+        description: 'Panel tipi, dizilim ve erişim koşulları belirlenir.',
+      },
+      {
+        title: 'Bakım talimatı kontrolü',
+        description: 'Üretici bakım gereklilikleri gözden geçirilir.',
+      },
+      {
+        title: 'Kontrollü temizlik',
+        description: 'Uygun su ve yöntemle panel yüzeyleri temizlenir.',
+      },
+      {
+        title: 'Görsel kontrol',
+        description: 'Temizlik sonrası yüzey ve bağlantı noktaları görsel olarak incelenir.',
+      },
     ],
     seoTitle: 'Güneş Paneli Temizliği | GES ve Çatı Üstü Sistemler',
     metaDescription:
@@ -150,15 +225,33 @@ export const staticServices: StaticService[] = [
       'Geniş çatı alanlarında uzun süren manuel temizlik',
     ],
     advantages: [
-      { title: 'Yüzeye yük bindirmeden', description: 'Kırılgan çatı kaplamalarında üzerinde yürüme ihtiyacı azalır.' },
-      { title: 'Geniş alanda hızlı ilerleme', description: 'Büyük çatı alanlarında sistematik ve sürekli ilerleme sağlanır.' },
-      { title: 'Tahliye noktalarına dikkat', description: 'Dere ve süzgeç bölgeleri uygulama planında ayrıca ele alınır.' },
-      { title: 'Çevre kontrolü', description: 'Uygulama sırasında çevredeki alanlar için koruma planlanır.' },
+      {
+        title: 'Yüzeye yük bindirmeden',
+        description: 'Kırılgan çatı kaplamalarında üzerinde yürüme ihtiyacı azalır.',
+      },
+      {
+        title: 'Geniş alanda hızlı ilerleme',
+        description: 'Büyük çatı alanlarında sistematik ve sürekli ilerleme sağlanır.',
+      },
+      {
+        title: 'Tahliye noktalarına dikkat',
+        description: 'Dere ve süzgeç bölgeleri uygulama planında ayrıca ele alınır.',
+      },
+      {
+        title: 'Çevre kontrolü',
+        description: 'Uygulama sırasında çevredeki alanlar için koruma planlanır.',
+      },
     ],
     surfaces: ['Kiremit', 'Membran', 'Sandviç panel', 'Trapez sac', 'Beton çatı'],
     process: [
-      { title: 'Çatı incelemesi', description: 'Kaplama türü, eğim ve hasarlı bölgeler tespit edilir.' },
-      { title: 'Risk ve çevre planı', description: 'Alt kotlarda güvenlik alanı ve su yönetimi planlanır.' },
+      {
+        title: 'Çatı incelemesi',
+        description: 'Kaplama türü, eğim ve hasarlı bölgeler tespit edilir.',
+      },
+      {
+        title: 'Risk ve çevre planı',
+        description: 'Alt kotlarda güvenlik alanı ve su yönetimi planlanır.',
+      },
       { title: 'Uygulama', description: 'Kirlilik türüne uygun yöntemle temizlik yapılır.' },
       { title: 'Tahliye kontrolü', description: 'Dere ve süzgeçlerin akışı kontrol edilir.' },
     ],
@@ -181,17 +274,47 @@ export const staticServices: StaticService[] = [
       'Tesis içi güvenlik prosedürlerine uyum gerekliliği',
     ],
     advantages: [
-      { title: 'Üretimi daha az aksatan planlama', description: 'Vardiya ve duruş planına uygun zaman aralıkları belirlenir.' },
-      { title: 'Geniş yüzeylerde verimli ilerleme', description: 'Yüksek ve uzun cephelerde sistematik bölümleme yapılır.' },
-      { title: 'Tesis güvenlik uyumu', description: 'Saha giriş, İSG ve izin prosedürleri sürecin parçasıdır.' },
-      { title: 'Yüzeye özel çözelti', description: 'Sac, panel ve beton yüzeylere uygun ürün seçimi yapılır.' },
+      {
+        title: 'Üretimi daha az aksatan planlama',
+        description: 'Vardiya ve duruş planına uygun zaman aralıkları belirlenir.',
+      },
+      {
+        title: 'Geniş yüzeylerde verimli ilerleme',
+        description: 'Yüksek ve uzun cephelerde sistematik bölümleme yapılır.',
+      },
+      {
+        title: 'Tesis güvenlik uyumu',
+        description: 'Saha giriş, İSG ve izin prosedürleri sürecin parçasıdır.',
+      },
+      {
+        title: 'Yüzeye özel çözelti',
+        description: 'Sac, panel ve beton yüzeylere uygun ürün seçimi yapılır.',
+      },
     ],
-    surfaces: ['Trapez sac cephe', 'Sandviç panel', 'Brüt beton', 'Metal konstrüksiyon', 'Silo ve tank yüzeyleri'],
+    surfaces: [
+      'Trapez sac cephe',
+      'Sandviç panel',
+      'Brüt beton',
+      'Metal konstrüksiyon',
+      'Silo ve tank yüzeyleri',
+    ],
     process: [
-      { title: 'Tesis keşfi', description: 'Cephe alanı, kirlilik türü ve erişim koşulları belirlenir.' },
-      { title: 'İSG ve izin süreci', description: 'Tesis prosedürlerine uygun çalışma izinleri tamamlanır.' },
-      { title: 'Planlı uygulama', description: 'Belirlenen zaman aralıklarında bölüm bölüm çalışılır.' },
-      { title: 'Raporlama', description: 'Uygulama öncesi/sonrası kayıtlar tesis yönetimine iletilir.' },
+      {
+        title: 'Tesis keşfi',
+        description: 'Cephe alanı, kirlilik türü ve erişim koşulları belirlenir.',
+      },
+      {
+        title: 'İSG ve izin süreci',
+        description: 'Tesis prosedürlerine uygun çalışma izinleri tamamlanır.',
+      },
+      {
+        title: 'Planlı uygulama',
+        description: 'Belirlenen zaman aralıklarında bölüm bölüm çalışılır.',
+      },
+      {
+        title: 'Raporlama',
+        description: 'Uygulama öncesi/sonrası kayıtlar tesis yönetimine iletilir.',
+      },
     ],
     seoTitle: 'Endüstriyel Cephe ve Fabrika Temizliği | Planlı Uygulama',
     metaDescription:
@@ -212,10 +335,22 @@ export const staticServices: StaticService[] = [
       'Farklı malzemelerin bir arada bulunduğu karma cepheler',
     ],
     advantages: [
-      { title: 'Malzeme bazlı yöntem', description: 'Her yüzey için ayrı ürün ve uygulama parametresi belirlenir.' },
-      { title: 'Test alanı uygulaması', description: 'Görünürlüğü düşük bir bölgede test yapılarak sonuç doğrulanır.' },
-      { title: 'Kontrollü basınç', description: 'Yüzey dayanımına göre uygulama şiddeti ayarlanır.' },
-      { title: 'Karma cephe planı', description: 'Farklı malzemelerin sınır bölgeleri ayrıca planlanır.' },
+      {
+        title: 'Malzeme bazlı yöntem',
+        description: 'Her yüzey için ayrı ürün ve uygulama parametresi belirlenir.',
+      },
+      {
+        title: 'Test alanı uygulaması',
+        description: 'Görünürlüğü düşük bir bölgede test yapılarak sonuç doğrulanır.',
+      },
+      {
+        title: 'Kontrollü basınç',
+        description: 'Yüzey dayanımına göre uygulama şiddeti ayarlanır.',
+      },
+      {
+        title: 'Karma cephe planı',
+        description: 'Farklı malzemelerin sınır bölgeleri ayrıca planlanır.',
+      },
     ],
     surfaces: ['Kompozit panel', 'Alüminyum', 'Paslanmaz çelik', 'Brüt beton', 'Doğal taş'],
     process: [
@@ -255,13 +390,11 @@ export const staticServices: StaticService[] = [
       },
       {
         title: 'İskele kurmadan erişim',
-        description:
-          'Geniş ve yüksek örtü yüzeylerine sahayı uzun süre kapatmadan yaklaşılabilir.',
+        description: 'Geniş ve yüksek örtü yüzeylerine sahayı uzun süre kapatmadan yaklaşılabilir.',
       },
       {
         title: 'Saha kullanımını daha az aksatır',
-        description:
-          'Uygulama planı, sahanın rezervasyon programı dikkate alınarak çıkarılır.',
+        description: 'Uygulama planı, sahanın rezervasyon programı dikkate alınarak çıkarılır.',
       },
     ],
     surfaces: ['PVC branda', 'Polietilen örtü', 'Tente kumaşı', 'Kafes ve taşıyıcı profiller'],
@@ -283,7 +416,8 @@ export const staticServices: StaticService[] = [
       },
       {
         title: 'Durulama ve kontrol',
-        description: 'Yüzey durulanır, sonuç birlikte incelenir ve gerekli noktalarda tekrar edilir.',
+        description:
+          'Yüzey durulanır, sonuç birlikte incelenir ve gerekli noktalarda tekrar edilir.',
       },
     ],
     seoTitle: 'Halı Saha Branda Temizliği | Tente ve Örtü Yüzey Temizliği',
@@ -312,10 +446,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Building',
     intro:
       'Plaza ve ofis binalarında cephe görünümü, kiracı memnuniyeti ve kurumsal imaj açısından belirleyicidir. Temizlik planlaması genellikle mesai saatleri ve otopark/giriş sirkülasyonu dikkate alınarak yapılır.',
-    needs: ['Periyodik cephe bakım takvimi', 'Mesaiyi aksatmayan zamanlama', 'Giriş ve otopark güvenliği', 'Yönetime raporlama'],
-    approach: ['Bina yönetimiyle takvim planlama', 'Kot bazlı bölümleme', 'Çalışma alanı güvenlik şeridi', 'Öncesi/sonrası kayıt'],
+    needs: [
+      'Periyodik cephe bakım takvimi',
+      'Mesaiyi aksatmayan zamanlama',
+      'Giriş ve otopark güvenliği',
+      'Yönetime raporlama',
+    ],
+    approach: [
+      'Bina yönetimiyle takvim planlama',
+      'Kot bazlı bölümleme',
+      'Çalışma alanı güvenlik şeridi',
+      'Öncesi/sonrası kayıt',
+    ],
     seoTitle: 'Plaza ve Ofis Binası Cephe Temizliği',
-    metaDescription: 'Plaza ve ofis binalarında periyodik cephe temizliği planlaması, mesaiyi aksatmayan zamanlama ve yönetime raporlama.',
+    metaDescription:
+      'Plaza ve ofis binalarında periyodik cephe temizliği planlaması, mesaiyi aksatmayan zamanlama ve yönetime raporlama.',
   },
   {
     slug: 'gokdelenler-ve-rezidanslar',
@@ -324,10 +469,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Building2',
     intro:
       'Yüksek yapılarda cephe temizliği; rüzgâr koşulları, yüksek kot erişimi ve sakin/kullanıcı güvenliği açısından ayrı bir planlama gerektirir. Operasyon öncesi meteorolojik değerlendirme sürecin parçasıdır.',
-    needs: ['Yüksek kotlara erişim', 'Rüzgâr ve hava koşulu takibi', 'Sakinleri bilgilendirme', 'Balkon ve teras detayları'],
-    approach: ['Hava durumu penceresine göre planlama', 'Site yönetimi bilgilendirmesi', 'Kot kot ilerleme', 'Güvenlik alanı tanımı'],
+    needs: [
+      'Yüksek kotlara erişim',
+      'Rüzgâr ve hava koşulu takibi',
+      'Sakinleri bilgilendirme',
+      'Balkon ve teras detayları',
+    ],
+    approach: [
+      'Hava durumu penceresine göre planlama',
+      'Site yönetimi bilgilendirmesi',
+      'Kot kot ilerleme',
+      'Güvenlik alanı tanımı',
+    ],
     seoTitle: 'Gökdelen ve Rezidans Cephe Temizliği',
-    metaDescription: 'Gökdelen ve rezidanslarda yüksek kot cephe temizliği; hava koşulu planlaması, sakin bilgilendirmesi ve güvenlik alanı yönetimi.',
+    metaDescription:
+      'Gökdelen ve rezidanslarda yüksek kot cephe temizliği; hava koşulu planlaması, sakin bilgilendirmesi ve güvenlik alanı yönetimi.',
   },
   {
     slug: 'avm-ve-perakende',
@@ -336,10 +492,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'ShoppingBag',
     intro:
       'AVM ve perakende yapılarında temizlik operasyonu, ziyaretçi trafiğinin düşük olduğu saatlerde planlanır. Giriş bölgeleri, cam yüzeyler ve tabela çevresi öncelikli alanlardır.',
-    needs: ['Ziyaretçi trafiğine uyum', 'Giriş ve vitrin bölgeleri', 'Tabela ve logo çevresi', 'Otopark üstü alanlar'],
-    approach: ['Düşük trafik saatlerinde çalışma', 'Bölge bölge kapatma planı', 'Yönlendirme ve uyarı ekipmanı', 'Hızlı kuruma takibi'],
+    needs: [
+      'Ziyaretçi trafiğine uyum',
+      'Giriş ve vitrin bölgeleri',
+      'Tabela ve logo çevresi',
+      'Otopark üstü alanlar',
+    ],
+    approach: [
+      'Düşük trafik saatlerinde çalışma',
+      'Bölge bölge kapatma planı',
+      'Yönlendirme ve uyarı ekipmanı',
+      'Hızlı kuruma takibi',
+    ],
     seoTitle: 'AVM ve Perakende Cephe Temizliği',
-    metaDescription: 'AVM ve perakende yapılarında ziyaretçi trafiğine uygun cephe ve cam temizliği planlaması.',
+    metaDescription:
+      'AVM ve perakende yapılarında ziyaretçi trafiğine uygun cephe ve cam temizliği planlaması.',
   },
   {
     slug: 'oteller-ve-turizm',
@@ -348,10 +515,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Hotel',
     intro:
       'Otellerde cephe görünümü doğrudan misafir algısını etkiler. Temizlik planı genellikle sezon yoğunluğu ve doluluk oranına göre yapılır; gürültü ve su akışı yönetimi önem taşır.',
-    needs: ['Sezon dışı planlama', 'Misafir konforu', 'Havuz ve teras çevresi', 'Deniz/tuz kaynaklı kirlilik'],
-    approach: ['Doluluk takvimine göre planlama', 'Blok bazlı ilerleme', 'Gürültü ve su yönetimi', 'Öncesi/sonrası kayıt'],
+    needs: [
+      'Sezon dışı planlama',
+      'Misafir konforu',
+      'Havuz ve teras çevresi',
+      'Deniz/tuz kaynaklı kirlilik',
+    ],
+    approach: [
+      'Doluluk takvimine göre planlama',
+      'Blok bazlı ilerleme',
+      'Gürültü ve su yönetimi',
+      'Öncesi/sonrası kayıt',
+    ],
     seoTitle: 'Otel ve Turizm Tesisi Cephe Temizliği',
-    metaDescription: 'Otellerde sezon planına uygun cephe temizliği; misafir konforunu gözeten zamanlama ve blok bazlı uygulama.',
+    metaDescription:
+      'Otellerde sezon planına uygun cephe temizliği; misafir konforunu gözeten zamanlama ve blok bazlı uygulama.',
   },
   {
     slug: 'hastaneler-ve-saglik',
@@ -360,10 +538,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'HeartPulse',
     intro:
       'Sağlık tesislerinde operasyon 7/24 sürer. Bu nedenle temizlik planı; acil giriş, ambulans yolu ve hasta odalarının bulunduğu bölgeler dikkate alınarak hazırlanır.',
-    needs: ['Kesintisiz hizmet uyumu', 'Acil giriş ve ambulans yolu', 'Gürültü kontrolü', 'Hijyen prosedürlerine uyum'],
-    approach: ['Tesis yönetimiyle bölge planı', 'Kritik girişlerin korunması', 'Düşük yoğunluk saatleri', 'Bilgilendirme ve yönlendirme'],
+    needs: [
+      'Kesintisiz hizmet uyumu',
+      'Acil giriş ve ambulans yolu',
+      'Gürültü kontrolü',
+      'Hijyen prosedürlerine uyum',
+    ],
+    approach: [
+      'Tesis yönetimiyle bölge planı',
+      'Kritik girişlerin korunması',
+      'Düşük yoğunluk saatleri',
+      'Bilgilendirme ve yönlendirme',
+    ],
     seoTitle: 'Hastane ve Sağlık Tesisi Cephe Temizliği',
-    metaDescription: 'Hastanelerde kesintisiz hizmeti aksatmayan cephe temizliği planlaması; kritik giriş ve bölge yönetimi.',
+    metaDescription:
+      'Hastanelerde kesintisiz hizmeti aksatmayan cephe temizliği planlaması; kritik giriş ve bölge yönetimi.',
   },
   {
     slug: 'okullar-ve-kampusler',
@@ -372,10 +561,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'GraduationCap',
     intro:
       'Okul ve kampüs yapılarında temizlik genellikle tatil dönemlerine veya ders dışı saatlere planlanır. Geniş yerleşkelerde birden fazla bloğun sıralı biçimde ele alınması gerekir.',
-    needs: ['Eğitim takvimine uyum', 'Çok bloklu yerleşke planı', 'Öğrenci güvenliği', 'Spor salonu ve yüksek tavanlı yapılar'],
-    approach: ['Tatil dönemi planlaması', 'Blok sıralaması', 'Alan güvenliği', 'Yerleşke yönetimine raporlama'],
+    needs: [
+      'Eğitim takvimine uyum',
+      'Çok bloklu yerleşke planı',
+      'Öğrenci güvenliği',
+      'Spor salonu ve yüksek tavanlı yapılar',
+    ],
+    approach: [
+      'Tatil dönemi planlaması',
+      'Blok sıralaması',
+      'Alan güvenliği',
+      'Yerleşke yönetimine raporlama',
+    ],
     seoTitle: 'Okul ve Kampüs Cephe Temizliği',
-    metaDescription: 'Okul ve kampüslerde eğitim takvimine uygun cephe temizliği; çok bloklu yerleşkelerde sıralı planlama.',
+    metaDescription:
+      'Okul ve kampüslerde eğitim takvimine uygun cephe temizliği; çok bloklu yerleşkelerde sıralı planlama.',
   },
   {
     slug: 'fabrikalar-ve-sanayi',
@@ -384,10 +584,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Factory',
     intro:
       'Sanayi tesislerinde cephe temizliği; İSG prosedürleri, çalışma izinleri ve üretim planı ile birlikte kurgulanır. Proses kaynaklı kirlilik türü, ürün seçimini doğrudan etkiler.',
-    needs: ['Üretim planına uyum', 'İSG ve çalışma izinleri', 'Proses kaynaklı kirlilik', 'Yüksek ve uzun cepheler'],
-    approach: ['Duruş planına göre zamanlama', 'İzin süreçlerinin yönetimi', 'Kirlilik türüne uygun ürün', 'Bölüm bazlı ilerleme'],
+    needs: [
+      'Üretim planına uyum',
+      'İSG ve çalışma izinleri',
+      'Proses kaynaklı kirlilik',
+      'Yüksek ve uzun cepheler',
+    ],
+    approach: [
+      'Duruş planına göre zamanlama',
+      'İzin süreçlerinin yönetimi',
+      'Kirlilik türüne uygun ürün',
+      'Bölüm bazlı ilerleme',
+    ],
     seoTitle: 'Fabrika ve Sanayi Tesisi Cephe Temizliği',
-    metaDescription: 'Fabrikalarda üretimi aksatmayan cephe temizliği; İSG uyumu, izin süreçleri ve proses kirliliğine uygun yöntem.',
+    metaDescription:
+      'Fabrikalarda üretimi aksatmayan cephe temizliği; İSG uyumu, izin süreçleri ve proses kirliliğine uygun yöntem.',
   },
   {
     slug: 'enerji-santralleri',
@@ -396,10 +607,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Zap',
     intro:
       'Güneş enerjisi santrallerinde panel yüzeyindeki kirlilik, ışık geçirgenliğini etkiler. Geniş sahalarda temizlik; dizi (string) bazlı planlama ve saha erişim koşullarına göre yürütülür.',
-    needs: ['Geniş saha planlaması', 'Panel üreticisi bakım talimatı', 'Su kalitesi yönetimi', 'Saha erişim koşulları'],
-    approach: ['Dizi bazlı bölümleme', 'Talimata uygun yöntem', 'Filtrelenmiş su kullanımı', 'Uygulama kayıtları'],
+    needs: [
+      'Geniş saha planlaması',
+      'Panel üreticisi bakım talimatı',
+      'Su kalitesi yönetimi',
+      'Saha erişim koşulları',
+    ],
+    approach: [
+      'Dizi bazlı bölümleme',
+      'Talimata uygun yöntem',
+      'Filtrelenmiş su kullanımı',
+      'Uygulama kayıtları',
+    ],
     seoTitle: 'GES ve Enerji Santrali Panel Temizliği',
-    metaDescription: 'Güneş enerjisi santrallerinde dizi bazlı panel temizliği planlaması, su kalitesi yönetimi ve üretici talimatına uyum.',
+    metaDescription:
+      'Güneş enerjisi santrallerinde dizi bazlı panel temizliği planlaması, su kalitesi yönetimi ve üretici talimatına uyum.',
   },
   {
     slug: 'lojistik-ve-depolar',
@@ -408,10 +630,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Warehouse',
     intro:
       'Depo ve lojistik yapıları genellikle uzun ve yüksek cephelere sahiptir. Sevkiyat trafiği devam ederken çalışılabilmesi için rampa ve manevra alanlarının planlamaya dahil edilmesi gerekir.',
-    needs: ['Sevkiyat trafiğiyle uyum', 'Rampa ve manevra alanları', 'Uzun cephe planlaması', 'Trapez sac yüzeyler'],
-    approach: ['Sevkiyat saatlerine göre planlama', 'Cephe aks bölümleme', 'Alan güvenliği', 'Sac yüzeye uygun ürün'],
+    needs: [
+      'Sevkiyat trafiğiyle uyum',
+      'Rampa ve manevra alanları',
+      'Uzun cephe planlaması',
+      'Trapez sac yüzeyler',
+    ],
+    approach: [
+      'Sevkiyat saatlerine göre planlama',
+      'Cephe aks bölümleme',
+      'Alan güvenliği',
+      'Sac yüzeye uygun ürün',
+    ],
     seoTitle: 'Lojistik Merkezi ve Depo Cephe Temizliği',
-    metaDescription: 'Depo ve lojistik merkezlerinde sevkiyatı aksatmayan cephe temizliği; uzun cephelerde aks bazlı planlama.',
+    metaDescription:
+      'Depo ve lojistik merkezlerinde sevkiyatı aksatmayan cephe temizliği; uzun cephelerde aks bazlı planlama.',
   },
   {
     slug: 'kamu-ve-belediye',
@@ -420,10 +653,21 @@ export const staticSectors: StaticSector[] = [
     icon: 'Landmark',
     intro:
       'Kamu yapılarında temizlik operasyonu; vatandaş sirkülasyonu, tarihi/korunması gereken cephe detayları ve idari onay süreçleri dikkate alınarak planlanır.',
-    needs: ['Vatandaş sirkülasyonu', 'Hassas cephe detayları', 'İdari onay süreçleri', 'Şeffaf raporlama'],
-    approach: ['Yoğunluk dışı saat planı', 'Hassas yüzeylerde test uygulaması', 'Süreç dokümantasyonu', 'Öncesi/sonrası kayıt'],
+    needs: [
+      'Vatandaş sirkülasyonu',
+      'Hassas cephe detayları',
+      'İdari onay süreçleri',
+      'Şeffaf raporlama',
+    ],
+    approach: [
+      'Yoğunluk dışı saat planı',
+      'Hassas yüzeylerde test uygulaması',
+      'Süreç dokümantasyonu',
+      'Öncesi/sonrası kayıt',
+    ],
     seoTitle: 'Kamu Binası ve Belediye Cephe Temizliği',
-    metaDescription: 'Kamu binalarında planlı cephe temizliği; hassas yüzeylerde test uygulaması ve şeffaf raporlama.',
+    metaDescription:
+      'Kamu binalarında planlı cephe temizliği; hassas yüzeylerde test uygulaması ve şeffaf raporlama.',
   },
 ]
 
@@ -505,12 +749,36 @@ export const techHotspots = [
 
 /** Ana sayfa problem/çözüm bölümü avantajları. */
 export const solutionAdvantages = [
-  { title: 'Daha düşük yüksekte çalışma riski', description: 'Personelin yükseklikte geçirdiği süre azalır.', icon: 'ShieldCheck' },
-  { title: 'Hızlı kurulum', description: 'Saha hazırlığı iskele kurulumuna göre daha kısa sürede tamamlanabilir.', icon: 'Timer' },
-  { title: 'Ulaşılması zor alanlara erişim', description: 'Mimari detay ve çıkma bölgelerine platform kurmadan yaklaşılır.', icon: 'Move3d' },
-  { title: 'İş akışını daha az aksatma', description: 'Zeminde kalıcı yapı kurulmadığı için sirkülasyon daha az kısıtlanır.', icon: 'Workflow' },
-  { title: 'Kontrollü uygulama', description: 'Basınç, debi ve çözelti yüzeye göre ayarlanır.', icon: 'SlidersHorizontal' },
-  { title: 'Farklı yüzeylere uygun süreç', description: 'Cam, kompozit, metal ve beton için ayrı uygulama planı hazırlanır.', icon: 'Layers' },
+  {
+    title: 'Daha düşük yüksekte çalışma riski',
+    description: 'Personelin yükseklikte geçirdiği süre azalır.',
+    icon: 'ShieldCheck',
+  },
+  {
+    title: 'Hızlı kurulum',
+    description: 'Saha hazırlığı iskele kurulumuna göre daha kısa sürede tamamlanabilir.',
+    icon: 'Timer',
+  },
+  {
+    title: 'Ulaşılması zor alanlara erişim',
+    description: 'Mimari detay ve çıkma bölgelerine platform kurmadan yaklaşılır.',
+    icon: 'Move3d',
+  },
+  {
+    title: 'İş akışını daha az aksatma',
+    description: 'Zeminde kalıcı yapı kurulmadığı için sirkülasyon daha az kısıtlanır.',
+    icon: 'Workflow',
+  },
+  {
+    title: 'Kontrollü uygulama',
+    description: 'Basınç, debi ve çözelti yüzeye göre ayarlanır.',
+    icon: 'SlidersHorizontal',
+  },
+  {
+    title: 'Farklı yüzeylere uygun süreç',
+    description: 'Cam, kompozit, metal ve beton için ayrı uygulama planı hazırlanır.',
+    icon: 'Layers',
+  },
 ] as const
 
 /**
@@ -552,7 +820,8 @@ export const whyUsItems = [
   },
   {
     title: 'Yüzeye göre uygulama planı',
-    description: 'Malzeme türüne uygun ürün ve parametre seçilir; gerektiğinde test alanı uygulanır.',
+    description:
+      'Malzeme türüne uygun ürün ve parametre seçilir; gerektiğinde test alanı uygulanır.',
     icon: 'Layers',
   },
   {
@@ -754,110 +1023,6 @@ export const referenceGroups: ReferenceGroup[] = [
 ]
 
 /**
- * DİĞER HİZMETLERİMİZ — grup çatısı altındaki tamamlayıcı hizmetler
- * ---------------------------------------------------------------------------
- * Kaynak: "MD GROUP KATALOG.pdf" ve "YEDİTEPE GÜVENLİK TANITIM.pdf".
- * Yalnızca bu dokümanlarda AÇIKÇA sayılan hizmet başlıkları listelenir.
- *
- * KURAL: Sitenin ana odağı drone destekli yüzey temizliğidir. Bu liste
- * tamamlayıcı bir blok olarak, tek bir bölümde ve kompakt biçimde gösterilir;
- * drone içeriğiyle yarışacak şekilde öne çıkarılmaz.
- *
- * Buraya sayısal iddia, sertifika veya kapasite bilgisi YAZILMAZ — dokümanlarda
- * geçse dahi doğrulanabilir olana kadar dışarıda bırakılır.
- */
-export type OtherServiceGroup = {
-  /** Detay sayfasındaki bölüm çapası — kartlar buraya derin bağlantı verir. */
-  id: string
-  title: string
-  icon: string
-  description: string
-  /** Kart kapak görseli (bkz. securityImages). */
-  image: string
-  items: string[]
-}
-
-export const otherServiceGroups: OtherServiceGroup[] = [
-  {
-    id: 'ozel-guvenlik',
-    title: 'Özel Güvenlik Hizmetleri',
-    icon: 'ShieldCheck',
-    image: securityImages.hospital,
-    description:
-      '5188 sayılı kanunun öngördüğü koşullarda, güvenlik eğitimini almış ve özel güvenlik kimlik kartına sahip personelle sabit noktalı koruma hizmeti.',
-    items: [
-      'Alışveriş merkezleri',
-      'Akıllı bina, site ve plazalar',
-      'Hastaneler ve sağlık tesisleri',
-      'Okullar ve eğitim kurumları',
-      'Oteller',
-      'Özel konutlar',
-      'Kamu kurum ve kuruluşları',
-      'Belediyeler ve bağlı kuruluşlar',
-      'Fabrika ve şantiyeler',
-      'Toplu ulaşım noktaları',
-    ],
-  },
-  {
-    id: 'organizasyon-koruma',
-    title: 'Organizasyon ve Özel Koruma',
-    icon: 'Users',
-    image: securityImages.vip,
-    description:
-      'Kısa süreli organizasyonlar ve kişiye özel koruma ihtiyaçları için, güvenlik risk değerlendirmesi sonrasında kurulan geçici güvenlik organizasyonu.',
-    items: [
-      'Fuar, konser ve seminer güvenliği',
-      'Stadyum ve spor tesisi güvenliği',
-      'Havaalanı güvenliği',
-      'VIP ve yakın koruma',
-      'Kısa süreli (part-time) güvenlik',
-      'K9 patlayıcı arama ekipleri',
-      'Medya ve basın kuruluşları',
-      'Özel karşılama ve uğurlamalar',
-    ],
-  },
-  {
-    id: 'elektronik-guvenlik',
-    title: 'Elektronik Güvenlik Sistemleri',
-    icon: 'Cpu',
-    image: securityImages.mall,
-    description:
-      'Tesisin ihtiyacı olan donanım, gerekli analizler yapıldıktan sonra kurulur ve işletilir.',
-    items: [
-      'CCTV kumanda ve gözetim merkezleri',
-      'CCTV kamera sistemleri',
-      'Yangın, soygun ve gaz ihbar alarm sistemleri',
-      'Elektronik turnike ve bariyerler',
-      'X-Ray cihazları',
-      'Kapı ve el tipi metal dedektörleri',
-      'Kartlı geçiş (access) sistemleri',
-      'Bekçi tur kontrol sistemi',
-    ],
-  },
-  {
-    /*
-     * Diğer üç başlık "ne verildiğini", bu başlık "nasıl işletildiğini"
-     * anlatır (tanıtım dokümanındaki "Bina ve Tesis Güvenliği" bölümü).
-     * Mekân türleri birinci başlıkta listelendiği için burada tekrarlanmaz.
-     */
-    id: 'bina-tesis',
-    title: 'Bina ve Tesis Güvenliği',
-    icon: 'Workflow',
-    image: securityImages.facility,
-    description:
-      'Proje kapsamındaki alanlarda gözetim ve denetim; etkin devriye sistemiyle kurulan sistemli bir güvenlik ağı.',
-    items: [
-      'Giriş ve çıkış kontrolleri',
-      'Devriye sistemi ve tur kontrolü',
-      'Güvenlik sistemleri operatörlüğü',
-      'Ziyaretçi kayıt ve yönlendirme',
-      'Acil durumlarda müdahale',
-      'Site ve konut güvenliği',
-    ],
-  },
-]
-
-/**
  * YEDİTEPE ÖZEL GÜVENLİK — /hizmetler/yeditepe-guvenlik sayfası içeriği.
  *
  * Hizmet KALEMLERİ ayrıca tanımlanmaz; yukarıdaki `otherServiceGroups` tek
@@ -927,25 +1092,6 @@ export const yeditepeSecurity = {
     },
   ],
 
-  /** K9 hizmetinin uygulanabildiği alanlar (Yeditepe tanıtımı, K9 sayfası). */
-  k9Areas: [
-    'Kişiye özel',
-    'Tesis içi veya dışı',
-    'Çeşitli etkinlik ve organizasyonlar',
-    'Özel karşılama ve uğurlamalar',
-    'Mevcut projeler',
-  ],
-
-  /** Organizasyonlarda fiziki güvenliği tamamlayan ekipman (part-time hizmetler). */
-  eventEquipment: [
-    'El tipi metal dedektör',
-    'Kapı tipi metal dedektör',
-    'X-Ray kontrol cihazı',
-    'Yönlendirme bantları',
-    'Eskort araçları',
-    'Telsiz',
-  ],
-
   /** Cevapların tamamı mevzuattan, grup yapısından veya tanıtım dokümanından. */
   faqs: [
     {
@@ -986,7 +1132,7 @@ export const yeditepeSecurity = {
     {
       question: 'Güvenlik personeli eğitimi de veriliyor mu?',
       answer:
-        '5188 sayılı kanunun yürürlüğe girmesiyle birlikte açılan eğitim kurumlarında, İstanbul ve İzmir\'de özel güvenlik eğitimi verilmektedir. Eğitim, hem bünyede istihdam edilecek personeli hem de diğer kurum ve kuruluşları kapsar.',
+        "5188 sayılı kanunun yürürlüğe girmesiyle birlikte açılan eğitim kurumlarında, İstanbul ve İzmir'de özel güvenlik eğitimi verilmektedir. Eğitim, hem bünyede istihdam edilecek personeli hem de diğer kurum ve kuruluşları kapsar.",
     },
   ],
 } as const

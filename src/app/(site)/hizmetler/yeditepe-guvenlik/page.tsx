@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Check, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
 import { buildMetadata } from '@/lib/seo/metadata'
 import { breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/seo/schema'
 import { JsonLd } from '@/components/shared/json-ld'
@@ -13,28 +13,30 @@ import { Icon } from '@/components/shared/icon'
 import { MediaImage } from '@/components/shared/media-image'
 import { BlueprintBackground, RadialLight } from '@/components/shared/technical'
 import { Button } from '@/components/ui/button'
-import { otherServiceGroups, yeditepeSecurity } from '@/config/content'
+import { yeditepeSecurity } from '@/config/content'
+import { securityServices } from '@/config/security'
 import { securityImages } from '@/config/images'
 import { siteConfig } from '@/config/site'
 import { toTelHref } from '@/lib/utils'
 
 /**
- * YEDİTEPE ÖZEL GÜVENLİK — /hizmetler/yeditepe-guvenlik
+ * YEDİTEPE ÖZEL GÜVENLİK — GİRİŞ SAYFASI
+ * /hizmetler/yeditepe-guvenlik
  *
  * NEDEN [slug] ŞABLONU DEĞİL, AYRI BİR ROUTE:
  * `/hizmetler/[slug]` şablonu yüzey temizliğine göre kurulmuş — "uygun
- * yüzeyler", "öncesi ve sonrası", "bu hizmeti hangi yapılarda veriyoruz"
- * bölümleri var ve teklif formu temizlik hizmetlerine bağlı. Güvenlik bu
- * alanların hiçbirine oturmuyor; üstelik AYRI BİR TÜZEL KİŞİLİK tarafından,
- * kendi telefon numarasıyla veriliyor. Şablona zorlamak, boş kalan alanları
- * uydurma içerikle doldurmayı gerektirirdi.
+ * yüzeyler", "öncesi ve sonrası" bölümleri var ve teklif formu temizlik
+ * hizmetlerine bağlı. Güvenlik bu alanlara oturmuyor; üstelik AYRI BİR TÜZEL
+ * KİŞİLİK tarafından, kendi telefon numarasıyla veriliyor.
  *
- * Next.js'te sabit segment dinamik segmentten önce eşleşir; bu dosya
- * `[slug]/page.tsx` ile çakışmaz, onu bu yol için geçersiz kılar.
+ * Bu sayfa yalnızca GİRİŞ noktasıdır: şirket kimliği, dört başlığın özeti,
+ * ortak süreç, sözleşme koşulları ve SSS. Her başlığın kendi içeriği kendi
+ * alt sayfasındadır (bkz. [slug]/page.tsx) — önce dördü de burada tek sayfada
+ * toplanıyordu ve hangi karta tıklanırsa tıklansın aynı sayfa açılıyordu.
  *
  * İÇERİK KURALI: personel sayısı, lokasyon adedi, deneyim yılı, SLA veya
- * sertifika iddiası YOK. Sayfadaki her sayı `otherServiceGroups` dizisinden
- * sayılarak üretilir; her mevzuat ifadesi 5188 sayılı kanuna dayanır.
+ * sertifika iddiası YOK. Sayılar dizilerden üretilir; her ifade tanıtım
+ * dokümanlarında yazılı olana dayanır (bkz. src/config/security.ts).
  */
 
 const security = siteConfig.groupCompanies[0]
@@ -44,12 +46,16 @@ const crumbs = [
   { label: security.brand, href: '/hizmetler/yeditepe-guvenlik' },
 ]
 
-const totalItems = otherServiceGroups.reduce((sum, group) => sum + group.items.length, 0)
+const totalItems = securityServices.reduce(
+  (sum, service) =>
+    sum + service.sections.reduce((count, section) => count + (section.items?.length ?? 0), 0),
+  0,
+)
 
 const faqs = yeditepeSecurity.faqs.map((faq, index) => ({ ...faq, id: `yeditepe-${index}` }))
 
 const description =
-  'Özel güvenlik, organizasyon güvenliği, elektronik güvenlik sistemleri ve tesis yönetimi hizmetleri; 5188 sayılı kanun kapsamında, grup bünyesindeki Yeditepe Koruma ve Güvenlik Hizmetleri Ltd. Şti. tarafından veriliyor.'
+  'Özel güvenlik, organizasyon ve özel koruma, elektronik güvenlik sistemleri ile bina ve tesis güvenliği; 5188 sayılı kanun kapsamında, grup bünyesindeki Yeditepe Koruma ve Güvenlik Hizmetleri Ltd. Şti. tarafından veriliyor.'
 
 export const metadata: Metadata = buildMetadata({
   title: 'Yeditepe Özel Güvenlik — Özel Güvenlik ve Elektronik Güvenlik Hizmetleri',
@@ -67,15 +73,15 @@ export default function YeditepeSecurityPage() {
             name: `${security.brand} — Özel Güvenlik Hizmetleri`,
             description,
             slug: 'yeditepe-guvenlik',
+            image: securityImages.stadium,
           }),
           faqSchema(faqs),
         ].filter((item) => item !== null)}
       />
 
       {/*
-        Hero görseli müşterinin sağladığı marka tanıtım fotoğrafı. Stok bir
-        güvenlik görseli kullanılmaz; tamamlanmış bir işin belgesi olarak da
-        sunulmaz (bkz. securityImages).
+        Hero görseli müşterinin sağladığı marka tanıtım fotoğrafı. Tamamlanmış
+        bir işin belgesi olarak sunulmaz (bkz. securityImages).
       */}
       <PageHero
         variant="media"
@@ -85,7 +91,7 @@ export default function YeditepeSecurityPage() {
         description={`${security.tagline}. ${security.scope}.`}
         crumbs={crumbs}
         meta={[
-          { label: 'Hizmet Başlığı', value: `${otherServiceGroups.length} grup` },
+          { label: 'Hizmet Başlığı', value: `${securityServices.length} grup` },
           { label: 'Kapsam', value: `${totalItems} hizmet kalemi` },
           { label: 'Mevzuat', value: '5188 sayılı kanun' },
         ]}
@@ -115,9 +121,7 @@ export default function YeditepeSecurityPage() {
 
             <div className="panel flex flex-col gap-5 rounded-md p-6 lg:p-7">
               <div className="flex items-center gap-4">
-                {/*
-                  Açık levha: logonun koyu gövdesi koyu temada zemine karışıyor.
-                */}
+                {/* Açık levha: logonun koyu gövdesi koyu temada zemine karışıyor. */}
                 <span className="bg-paper flex size-14 shrink-0 items-center justify-center rounded-sm p-1.5">
                   <Image
                     src={security.logo}
@@ -177,7 +181,7 @@ export default function YeditepeSecurityPage() {
         </Container>
       </Section>
 
-      {/* --- Hizmet kapsamı --- */}
+      {/* --- Dört başlık --- */}
       <Section spacing="md" id="kapsam" tone="raised" className="scroll-mt-24">
         <Container>
           <SectionHeader
@@ -187,118 +191,61 @@ export default function YeditepeSecurityPage() {
           />
 
           <Reveal stagger className="mt-14">
-            <ul className="grid gap-6 lg:grid-cols-2">
-              {otherServiceGroups.map((group, index) => (
-                /*
-                  `id` + scroll-mt: "Diğer hizmetlerimiz" kartları buraya derin
-                  bağlantı verir; sabit header'ın altında kalmaması için üstten
-                  boşluk bırakılır.
-                */
-                <RevealItem as="li" key={group.id}>
-                  <article
-                    id={group.id}
-                    className="panel flex h-full scroll-mt-28 flex-col overflow-hidden rounded-md"
-                  >
-                    <div className="bg-surface-sunken relative aspect-[16/10]">
+            <ul className="grid gap-6 sm:grid-cols-2">
+              {securityServices.map((service, index) => (
+                <RevealItem as="li" key={service.slug}>
+                  <article className="group panel hover:border-line-strong relative flex h-full flex-col overflow-hidden rounded-md transition-colors duration-300">
+                    <div className="bg-surface-sunken relative aspect-[16/10] overflow-hidden">
                       <MediaImage
-                        src={group.image}
-                        alt={group.title}
-                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        src={service.image}
+                        alt={service.title}
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                        className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                       />
                       <span className="bg-paper text-brand-600 absolute bottom-4 left-4 flex size-12 items-center justify-center rounded-sm shadow-md">
-                        <Icon name={group.icon} className="size-6" />
+                        <Icon name={service.icon} className="size-6" />
                       </span>
                       <span className="tech-label bg-scrim/70 absolute top-4 right-4 rounded-xs px-2 py-1 text-white backdrop-blur-sm">
                         {String(index + 1).padStart(2, '0')}
                       </span>
                     </div>
 
-                    <div className="flex flex-1 flex-col gap-5 p-6 md:p-8">
-                      <div className="flex flex-col gap-2.5">
-                        <h3 className="text-ink text-xl leading-snug font-semibold">
-                          {group.title}
-                        </h3>
-                        <p className="text-ink-muted text-base leading-relaxed">
-                          {group.description}
-                        </p>
-                      </div>
+                    <div className="flex flex-1 flex-col gap-4 p-6 md:p-7">
+                      <h2 className="text-ink text-xl leading-snug font-semibold">
+                        <Link
+                          href={`/hizmetler/yeditepe-guvenlik/${service.slug}`}
+                          className="after:absolute after:inset-0"
+                        >
+                          {service.title}
+                        </Link>
+                      </h2>
+                      <p className="text-ink-muted text-base leading-relaxed">
+                        {service.shortDescription}
+                      </p>
 
-                      <ul className="border-line mt-auto grid gap-2.5 border-t pt-5 sm:grid-cols-2">
-                        {group.items.map((item) => (
-                          <li key={item} className="text-ink-muted flex items-start gap-2 text-sm">
-                            <Check
-                              className="text-brand-600 mt-0.5 size-3.5 shrink-0"
-                              aria-hidden
-                            />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {/*
+                        Kalem listesi yerine BÖLÜM BAŞLIKLARI gösterilir: dört
+                        kartın tamamı kalemleriyle basılınca sayfa bir liste
+                        yığınına dönüyor ve alt sayfaların varlık sebebi
+                        kalmıyordu.
+                      */}
+                      <p className="text-ink-subtle text-sm leading-relaxed">
+                        {service.sections.map((section) => section.title).join(' · ')}
+                      </p>
+
+                      <span className="text-brand-600 mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium">
+                        Detayları Gör
+                        <ArrowUpRight
+                          className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          aria-hidden
+                        />
+                      </span>
                     </div>
                   </article>
                 </RevealItem>
               ))}
             </ul>
           </Reveal>
-        </Container>
-      </Section>
-
-      {/* --- K9 ve organizasyon ekipmanı --- */}
-      <Section spacing="md" tone="light">
-        <Container>
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-            <article className="panel flex flex-col overflow-hidden rounded-md">
-              <div className="bg-surface-sunken relative aspect-[16/10]">
-                <MediaImage
-                  src={securityImages.k9}
-                  alt="K9 arama köpeği ve görevlisi"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-              <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
-                <h2 className="text-ink text-xl leading-snug font-semibold">K9 hizmetleri</h2>
-                <p className="text-ink-muted text-base leading-relaxed">
-                  Bomba ve tanıtılan maddeye duyarlı, Kanada ve Amerika K-9 programlarına göre
-                  eğitilmiş köpekler ve ilgili branşlarda görev yapmış uzman kadro ile çalışılır.
-                </p>
-                <ul className="border-line mt-auto grid gap-2.5 border-t pt-5 sm:grid-cols-2">
-                  {yeditepeSecurity.k9Areas.map((area) => (
-                    <li key={area} className="text-ink-muted flex items-start gap-2 text-sm">
-                      <Check className="text-brand-600 mt-0.5 size-3.5 shrink-0" aria-hidden />
-                      <span>{area}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-
-            <article className="panel flex flex-col overflow-hidden rounded-md">
-              <div className="bg-surface-sunken relative aspect-[16/10]">
-                <MediaImage
-                  src={securityImages.xray}
-                  alt="X-Ray kontrol cihazı ve operatörü"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-              <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
-                <h2 className="text-ink text-xl leading-snug font-semibold">
-                  Organizasyon ekipmanları
-                </h2>
-                <p className="text-ink-muted text-base leading-relaxed">
-                  Organizasyonun ihtiyacına göre, fiziki güvenliği tamamlayan ekipman ve teçhizatla
-                  ek tedbirler alınır.
-                </p>
-                <ul className="border-line mt-auto grid gap-2.5 border-t pt-5 sm:grid-cols-2">
-                  {yeditepeSecurity.eventEquipment.map((item) => (
-                    <li key={item} className="text-ink-muted flex items-start gap-2 text-sm">
-                      <Check className="text-brand-600 mt-0.5 size-3.5 shrink-0" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          </div>
         </Container>
       </Section>
 
@@ -326,7 +273,7 @@ export default function YeditepeSecurityPage() {
         </Container>
       </Section>
 
-      {/* --- Avantajlar (sözleşme tarafı) --- */}
+      {/* --- Sözleşme tarafı --- */}
       <Section spacing="md" tone="raised">
         <Container>
           <SectionHeader

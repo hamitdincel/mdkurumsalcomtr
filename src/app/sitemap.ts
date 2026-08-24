@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { absoluteUrl } from '@/config/site'
+import { securityServices } from '@/config/security'
 import { getServiceSlugs, getSectorSlugs } from '@/services/content-service'
 import { listAllProjectSlugs } from '@/repositories/project-repository'
 import { listAllPostSlugs, listCategories } from '@/repositories/post-repository'
@@ -17,11 +18,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl('/'), lastModified: now, changeFrequency: 'weekly', priority: 1 },
-    { url: absoluteUrl('/hizmetler'), lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    {
+      url: absoluteUrl('/hizmetler'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
     /*
-     * Sabit route: `getServiceSlugs()` yalnızca veritabanı/statik hizmet
-     * kayıtlarını döner, bu sayfa oradan gelmez. Elle eklenmezse sitemap'te
-     * hiç görünmez.
+     * Sabit route'lar: `getServiceSlugs()` yalnızca veritabanı/statik hizmet
+     * kayıtlarını döner, güvenlik sayfaları oradan gelmez. Elle eklenmezse
+     * sitemap'te hiç görünmezler.
      */
     {
       url: absoluteUrl('/hizmetler/yeditepe-guvenlik'),
@@ -29,18 +35,59 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    { url: absoluteUrl('/sektorler'), lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    ...securityServices.map((service) => ({
+      url: absoluteUrl(`/hizmetler/yeditepe-guvenlik/${service.slug}`),
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
+    {
+      url: absoluteUrl('/sektorler'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     { url: absoluteUrl('/projeler'), lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    { url: absoluteUrl('/once-sonra'), lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    {
+      url: absoluteUrl('/once-sonra'),
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
     { url: absoluteUrl('/blog'), lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: absoluteUrl('/hakkimizda'), lastModified: now, changeFrequency: 'yearly', priority: 0.6 },
+    {
+      url: absoluteUrl('/hakkimizda'),
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    },
     { url: absoluteUrl('/sss'), lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: absoluteUrl('/teklif-al'), lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    {
+      url: absoluteUrl('/teklif-al'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
     { url: absoluteUrl('/iletisim'), lastModified: now, changeFrequency: 'yearly', priority: 0.7 },
     { url: absoluteUrl('/kvkk'), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
-    { url: absoluteUrl('/aydinlatma-metni'), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
-    { url: absoluteUrl('/cerez-politikasi'), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
-    { url: absoluteUrl('/gizlilik-politikasi'), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    {
+      url: absoluteUrl('/aydinlatma-metni'),
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
+    {
+      url: absoluteUrl('/cerez-politikasi'),
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
+    {
+      url: absoluteUrl('/gizlilik-politikasi'),
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
   ]
 
   const [services, sectors, projects, posts, categories] = await Promise.all([
