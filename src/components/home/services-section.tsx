@@ -10,12 +10,15 @@ import type { ServiceSummary } from '@/services/content-service'
 /**
  * SECTION 04 — HİZMETLER (bento)
  *
- * Kart yığılmasını kırmak için iki kart tipi karıştırılır:
- *   - İlk hizmet: geniş, fotoğraf baskın "feature tile"
- *   - Yanında: bilgi baskın (zeminli, ikonlu) kart
- *   - Alt sıra: fotoğraf baskın kartlar
+ * Düzen: geniş "feature tile" + yanında dar kart + altta dört kart.
+ * Boyut farkı zaten kart yığılmasını kırdığı için kart TİPİ içeriğe göre
+ * seçilir:
  *
- * Böylece aynı görünümde altı kart yan yana dizilmez.
+ *   - Kapak görseli olan hizmet  → fotoğraf baskın kart (media)
+ *   - Görseli olmayan hizmet     → bilgi baskın kart (info)
+ *
+ * Böylece panelden yüklenen görsel her zaman kullanılır; görsel yoksa da
+ * boş yer tutucu yerine anlamlı bir kart çıkar.
  */
 export function ServicesSection({ services }: { services: ServiceSummary[] }) {
   if (services.length === 0) return null
@@ -73,7 +76,7 @@ export function ServicesSection({ services }: { services: ServiceSummary[] }) {
                   icon={second.icon}
                   image={second.heroImage}
                   index={1}
-                  variant="info"
+                  variant={second.heroImage ? 'media' : 'info'}
                   className="h-full"
                 />
               </RevealItem>
@@ -92,7 +95,7 @@ export function ServicesSection({ services }: { services: ServiceSummary[] }) {
                     icon={service.icon}
                     image={service.heroImage}
                     index={index + 2}
-                    variant="media"
+                    variant={service.heroImage ? 'media' : 'info'}
                     className="h-full"
                   />
                 </RevealItem>
