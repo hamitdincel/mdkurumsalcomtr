@@ -1,6 +1,7 @@
 import { Breadcrumb, type Crumb } from './breadcrumb'
 import { Container } from './section'
 import { MediaImage } from './media-image'
+import { MediaScrim } from './media-scrim'
 import {
   BlueprintBackground,
   RadialLight,
@@ -60,19 +61,7 @@ export function PageHero({
               <RadialLight position="80% 10%" color="rgba(17,85,240,0.25)" />
             </>
           )}
-          {/*
-            Okunabilirlik karartması. Ana sayfa hero'sundaki ile aynı gerekçe:
-            metin sol tarafta durduğu için yatay gradyan o tarafı karartır,
-            dikey gradyan üstte header'a taban verir. (Bkz. hero.tsx)
-          */}
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-r from-scrim/90 via-scrim/65 to-scrim/20"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-scrim/80 via-transparent to-scrim/55"
-          />
+          <MediaScrim variant="hero" />
         </div>
 
         <Container className="relative pt-28 pb-10 md:pt-32 md:pb-14">

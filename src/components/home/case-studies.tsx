@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, MapPin } from 'lucide-react'
 import { Container, Section } from '@/components/shared/section'
 import { Reveal } from '@/components/shared/reveal'
 import { MediaImage } from '@/components/shared/media-image'
+import { MediaScrim } from '@/components/shared/media-scrim'
 import { SectionNumber } from '@/components/shared/technical'
 import { Button } from '@/components/ui/button'
 import type { ProjectCardData } from '@/repositories/project-repository'
@@ -56,44 +57,44 @@ export function CaseStudies({ projects }: { projects: ProjectCardData[] }) {
                 className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
                 placeholderLabel="Proje görseli"
               />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-scrim via-scrim/80 via-45% to-scrim/10"
-              />
               <span
                 aria-hidden
                 className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-500 to-signal transition-transform duration-500 group-hover:scale-x-100"
               />
 
-              <div className="relative mt-auto flex flex-col gap-4 p-7 md:p-9">
-                <p className="tech-label flex flex-wrap items-center gap-x-3 gap-y-1 text-signal">
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="size-3.5" aria-hidden />
-                    {featured.city}
+              <div className="relative mt-auto w-full">
+                <MediaScrim />
+
+                <div className="relative flex flex-col gap-4 p-7 md:p-9">
+                  <p className="tech-label flex flex-wrap items-center gap-x-3 gap-y-1 text-signal">
+                    <span className="inline-flex items-center gap-1.5">
+                      <MapPin className="size-3.5" aria-hidden />
+                      {featured.city}
+                    </span>
+                    {clientLabel && <span className="text-white/60">{clientLabel}</span>}
+                    {featured.service?.title && (
+                      <span className="text-white/60">{featured.service.title}</span>
+                    )}
+                  </p>
+
+                  <h3 className="max-w-xl text-2xl leading-snug font-semibold text-white md:text-3xl">
+                    <Link href={`/projeler/${featured.slug}`} className="after:absolute after:inset-0">
+                      {featured.title}
+                    </Link>
+                  </h3>
+
+                  <p className="max-w-lg text-base leading-relaxed text-ink-on-dark-muted">
+                    {featured.summary}
+                  </p>
+
+                  <span className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-white">
+                    Projeyi İncele
+                    <ArrowUpRight
+                      className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      aria-hidden
+                    />
                   </span>
-                  {clientLabel && <span className="text-white/60">{clientLabel}</span>}
-                  {featured.service?.title && (
-                    <span className="text-white/60">{featured.service.title}</span>
-                  )}
-                </p>
-
-                <h3 className="max-w-xl text-2xl leading-snug font-semibold text-white md:text-3xl">
-                  <Link href={`/projeler/${featured.slug}`} className="after:absolute after:inset-0">
-                    {featured.title}
-                  </Link>
-                </h3>
-
-                <p className="max-w-lg text-base leading-relaxed text-ink-on-dark-muted">
-                  {featured.summary}
-                </p>
-
-                <span className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-white">
-                  Projeyi İncele
-                  <ArrowUpRight
-                    className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden
-                  />
-                </span>
+                </div>
               </div>
             </article>
 

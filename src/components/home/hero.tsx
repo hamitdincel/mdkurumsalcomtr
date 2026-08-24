@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, PlayCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { MediaImage } from '@/components/shared/media-image'
+import { MediaScrim } from '@/components/shared/media-scrim'
 import { HeroVideo } from './hero-video'
 import { HeroScrollCue } from './hero-scroll-cue'
 import {
@@ -50,25 +51,12 @@ export function Hero({ settings }: { settings: ResolvedSettings }) {
         {hero.videoUrl && <HeroVideo src={hero.videoUrl} poster={hero.posterUrl ?? undefined} />}
 
         {/*
-          Okunabilirlik katmanları. Metin solda durduğu için karartma soldan
-          sağa azalır; fotoğrafın operasyon tarafı görünür kalır.
+          Okunabilirlik karartması — dekorasyon değil, işlev. Metin alt-solda,
+          header üstte saydam durduğu için karartma yalnızca o üç bölgeye
+          uygulanır; kadrajın ortası ve sağı fotoğrafın kendisine bırakılır.
+          Ayrıntılı gerekçe: media-scrim.tsx
         */}
-        {/*
-          OKUNABİLİRLİK KARARTMASI — dekorasyon değil, işlev.
-          Sadeleştirme sırasında tek gradyana indirilmişti; metnin durduğu SOL
-          taraf korumasız kaldı ve parlak gökyüzü üzerinde alt metin 4.30,
-          eyebrow 1.98 kontrasta düştü. Yatay gradyan geri getirildi:
-            · yatay  → metin tarafını karartır, sağdaki drone açıkta kalır
-            · dikey  → üstte header, altta operasyon rayı için taban verir
-        */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-r from-scrim/90 via-scrim/65 to-scrim/15"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-scrim/85 via-transparent to-scrim/55"
-        />
+        <MediaScrim variant="hero" />
       </div>
 
       {/*

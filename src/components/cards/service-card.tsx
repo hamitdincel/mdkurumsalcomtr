@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { Icon } from '@/components/shared/icon'
 import { MediaImage } from '@/components/shared/media-image'
+import { MediaScrim } from '@/components/shared/media-scrim'
 import { cn } from '@/lib/utils'
 
 /**
@@ -25,6 +26,13 @@ type ServiceCardProps = {
   variant?: 'media' | 'info'
   /** Bento içinde büyük yer kaplayan öne çıkan kart */
   featured?: boolean
+  /**
+   * Ekranın üst kısmında (fold üstü) görünen kartlar için `true`.
+   * next/image varsayılan olarak lazy yükler; ilk satırdaki kart LCP öğesi
+   * olduğunda bu, ölçülebilir bir LCP gecikmesi demek. Yalnızca ilk satıra
+   * verilir — hepsine verilirse öncelik anlamını yitirir.
+   */
+  priority?: boolean
   className?: string
 }
 
@@ -37,6 +45,7 @@ export function ServiceCard({
   index,
   variant = 'media',
   featured,
+  priority,
   className,
 }: ServiceCardProps) {
   const number = index !== undefined ? String(index + 1).padStart(2, '0') : undefined
@@ -82,7 +91,7 @@ export function ServiceCard({
     <article
       className={cn(
         'group relative isolate flex overflow-hidden rounded-md bg-onyx',
-        featured ? 'min-h-[26rem]' : 'min-h-80',
+        featured ? 'min-h-[26rem]' : 'min-h-[24rem]',
         className,
       )}
     >
@@ -90,21 +99,11 @@ export function ServiceCard({
         src={image}
         alt={title}
         sizes={featured ? '(max-width: 768px) 100vw, 60vw' : '(max-width: 768px) 100vw, 33vw'}
+        priority={priority}
         className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
         placeholderLabel="Hizmet görseli"
       />
 
-      {/*
-       * Okunabilirlik gradyanı.
-       * Parlak fotoğraflarda (gökyüzü, güneş paneli, beyaz cephe) eski yoğunluk
-       * yetersizdi ve metin fotoğrafın içinde kayboluyordu. Gradyan artık altta
-       * neredeyse opak başlar ve metin bloğunun bittiği yere kadar taşır;
-       * üstte görselin kendisi açıkta kalır.
-       */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-scrim via-scrim/80 via-45% to-scrim/10"
-      />
       {/* Hover'da marka tonu */}
       <div
         aria-hidden
@@ -116,37 +115,46 @@ export function ServiceCard({
         className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-500 to-signal transition-transform duration-500 group-hover:scale-x-100"
       />
 
-      <div className="relative mt-auto flex w-full items-end justify-between gap-6 p-6 md:p-7">
-        <div className="flex flex-col gap-2.5">
-          {number && <span className="tech-label text-signal">{number}</span>}
+      <div className="relative mt-auto w-full">
+        <MediaScrim />
 
-          <h3
-            className={cn(
-              'leading-snug font-semibold text-white',
-              featured ? 'text-2xl md:text-3xl' : 'text-xl',
-            )}
-          >
-            <Link href={`/hizmetler/${slug}`} className="after:absolute after:inset-0">
-              {title}
-            </Link>
-          </h3>
+        <div className="relative flex items-end justify-between gap-6 p-6 md:p-7">
+          <div className="flex flex-col gap-2.5">
+            {number && <span className="tech-label text-signal">{number}</span>}
 
-          <p
-            className={cn(
-              'max-w-md text-sm leading-relaxed text-ink-on-dark-muted',
-              featured ? 'block' : 'hidden md:block',
-            )}
-          >
-            {shortDescription}
-          </p>
+            <h3
+              className={cn(
+                'leading-snug font-semibold text-white',
+                featured ? 'text-2xl md:text-3xl' : 'text-xl',
+              )}
+            >
+              <Link href={`/hizmetler/${slug}`} className="after:absolute after:inset-0">
+                {title}
+              </Link>
+            </h3>
+
+            {/*
+              Dar kartta açıklama 2 satırla sınırlı. Sınırsız bırakıldığında
+              beş satıra sarıp kartı bir metin duvarına çeviriyor, fotoğraftan
+              geriye bir şey kalmıyordu. Tam metin hizmet detayında zaten var.
+            */}
+            <p
+              className={cn(
+                'max-w-md text-sm leading-relaxed text-ink-on-dark-muted',
+                featured ? 'block' : 'hidden md:line-clamp-2',
+              )}
+            >
+              {shortDescription}
+            </p>
+          </div>
+
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-white/25 text-white transition-all duration-300 group-hover:border-signal group-hover:bg-signal/15">
+            <ArrowUpRight
+              className="size-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              aria-hidden
+            />
+          </span>
         </div>
-
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-white/25 text-white transition-all duration-300 group-hover:border-signal group-hover:bg-signal/15">
-          <ArrowUpRight
-            className="size-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            aria-hidden
-          />
-        </span>
       </div>
     </article>
   )
