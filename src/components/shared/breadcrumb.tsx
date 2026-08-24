@@ -25,7 +25,7 @@ export function Breadcrumb({
             href="/"
             className={cn(
               'transition-colors',
-              dark ? 'text-ink-inverse-muted hover:text-white' : 'text-ink-subtle hover:text-ink',
+              dark ? 'text-ink-on-dark-muted hover:text-white' : 'text-ink-subtle hover:text-ink',
             )}
           >
             Ana Sayfa
@@ -37,7 +37,7 @@ export function Breadcrumb({
             <li key={item.href} className="flex items-center gap-1.5">
               <ChevronRight
                 aria-hidden
-                className={cn('size-3.5', dark ? 'text-ink-inverse-muted/60' : 'text-ink-subtle/60')}
+                className={cn('size-3.5', dark ? 'text-ink-on-dark-muted/70' : 'text-ink-subtle/60')}
               />
               {isLast ? (
                 <span
@@ -52,7 +52,7 @@ export function Breadcrumb({
                   className={cn(
                     'transition-colors',
                     dark
-                      ? 'text-ink-inverse-muted hover:text-white'
+                      ? 'text-ink-on-dark-muted hover:text-white'
                       : 'text-ink-subtle hover:text-ink',
                   )}
                 >

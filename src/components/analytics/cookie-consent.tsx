@@ -145,7 +145,7 @@ export function CookiePreferencesButton() {
     <button
       type="button"
       onClick={openPreferences}
-      className="text-sm text-ink-inverse-muted underline-offset-4 transition-colors hover:text-white hover:underline"
+      className="text-sm text-ink-inverse-muted underline-offset-4 transition-colors hover:text-ink-inverse hover:underline"
     >
       Çerez Tercihleri
     </button>
