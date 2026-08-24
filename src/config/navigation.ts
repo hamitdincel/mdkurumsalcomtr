@@ -43,8 +43,16 @@ export const mainNav: NavItem[] = [
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
   {
+    /*
+     * Bu gruptaki bağlantılar footer'da DİNAMİK hizmet listesinin ARDINDAN
+     * gelir (bkz. footer.tsx). Hizmetlerin kendisi veritabanından beslendiği
+     * için burada tekrarlanmaz; yalnızca sabit sayfalar listelenir.
+     */
     title: 'Hizmetler',
-    items: [{ label: 'Tüm Hizmetler', href: '/hizmetler' }],
+    items: [
+      { label: 'Yeditepe Özel Güvenlik', href: '/hizmetler/yeditepe-guvenlik' },
+      { label: 'Tüm Hizmetler', href: '/hizmetler' },
+    ],
   },
   {
     title: 'Kurumsal',

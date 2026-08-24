@@ -71,19 +71,32 @@ export function OtherServices({
                 tarafından, 5188 sayılı kanun kapsamında verilir.
               </p>
 
-              <a
-                href={`tel:${toTelHref(security.phone)}`}
-                className="text-sm font-medium text-brand-600 underline-offset-4 hover:underline"
-              >
-                {security.phone}
-              </a>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <a
+                  href={`tel:${toTelHref(security.phone)}`}
+                  className="text-sm font-medium text-brand-600 underline-offset-4 hover:underline"
+                >
+                  {security.phone}
+                </a>
+                <Link
+                  href="/hizmetler/yeditepe-guvenlik"
+                  className="text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+                >
+                  Detaylı bilgi
+                </Link>
+              </div>
             </div>
           }
         />
 
+        {/*
+          Önce doğrudan /iletisim'e gidiyordu; ziyaretçi hizmetin kapsamını
+          görmeden iletişim formuna düşüyordu. Artık detay sayfasına gider,
+          arama seçeneği orada da var.
+        */}
         <Button asChild variant="secondary" size="md" className="mt-8">
-          <Link href="/iletisim">
-            Bu hizmetler için bize ulaşın
+          <Link href="/hizmetler/yeditepe-guvenlik">
+            Güvenlik hizmetlerini inceleyin
             <ArrowRight className="size-4" aria-hidden />
           </Link>
         </Button>

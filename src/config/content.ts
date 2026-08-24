@@ -831,6 +831,74 @@ export const otherServiceGroups: OtherServiceGroup[] = [
   },
 ]
 
+/**
+ * YEDİTEPE ÖZEL GÜVENLİK — /hizmetler/yeditepe-guvenlik sayfası içeriği.
+ *
+ * Hizmet KALEMLERİ ayrıca tanımlanmaz; yukarıdaki `otherServiceGroups` tek
+ * kaynak olarak kullanılır. Aynı liste iki yerde tutulsaydı biri güncellenip
+ * diğeri unutulurdu.
+ *
+ * Buradaki metinler yalnızca SÜREÇ ve MEVZUAT anlatımıdır. Personel sayısı,
+ * lokasyon adedi, deneyim yılı, SLA taahhüdü veya sertifika gibi hiçbir
+ * doğrulanmamış iddia yer ALMAZ — rakip sitelerde standart olan bu ifadeler
+ * bilinçli olarak dışarıda bırakılmıştır. Belgelenebilir bilgiler
+ * siteConfig.company altında toplanır ve boş oldukları sürece gösterilmez.
+ */
+export const yeditepeSecurity = {
+  /** Bir güvenlik hizmetinin nasıl kurulduğu. Süre/adet taahhüdü içermez. */
+  process: [
+    {
+      title: 'Keşif ve risk değerlendirmesi',
+      description:
+        'Tesis yerinde incelenir; giriş-çıkış noktaları, kritik alanlar, aydınlatma ve mevcut önlemler çıkarılır.',
+    },
+    {
+      title: 'Güvenlik planı',
+      description:
+        'Nokta sayısı, devriye güzergâhı, vardiya düzeni ve elektronik sistem ihtiyacı bu değerlendirmeye göre belirlenir.',
+    },
+    {
+      title: 'Görevlendirme',
+      description:
+        'Özel güvenlik temel eğitimini tamamlamış ve valilikçe düzenlenen kimlik kartını taşıyan personel görevlendirilir.',
+    },
+    {
+      title: 'Denetim ve raporlama',
+      description:
+        'Saha amiri denetimi, tur kontrol kayıtları ve olay raporlarıyla hizmet izlenir; aksaklıklar yazılı olarak paylaşılır.',
+    },
+  ],
+
+  /** Yalnızca mevzuattan veya grup yapısından doğrulanabilir cevaplar. */
+  faqs: [
+    {
+      question: 'Güvenlik hizmetini MD Kurumsal mı veriyor?',
+      answer:
+        'Hayır. Özel güvenlik ve elektronik güvenlik hizmetleri, grup bünyesindeki Yeditepe Koruma ve Güvenlik Hizmetleri Ltd. Şti. tarafından verilir. Yüzey temizliği ve güvenlik ayrı ekiplerle yürütülür; talebinizi tek noktadan iletebilir, ilgili şirkete yönlendirilmesini isteyebilirsiniz.',
+    },
+    {
+      question: 'Özel güvenlik hizmeti hangi mevzuata tabi?',
+      answer:
+        '5188 sayılı Özel Güvenlik Hizmetlerine Dair Kanun ve bu kanunun uygulanmasına ilişkin yönetmelik. Hizmet, bu kapsamda faaliyet izni bulunan şirket ve kimlik kartlı personel ile verilir.',
+    },
+    {
+      question: 'Görevlendirilen personel hangi belgeleri taşır?',
+      answer:
+        'Özel güvenlik görevlisinin temel eğitimi tamamlamış olması ve valilik tarafından düzenlenen özel güvenlik kimlik kartını taşıması gerekir. Kart, görev sırasında görünür biçimde bulundurulur.',
+    },
+    {
+      question: 'Fiziki güvenlik ile elektronik sistemler birlikte alınabilir mi?',
+      answer:
+        'Evet. Kamera ve gözetim merkezi, kartlı geçiş, turnike, metal dedektör ve yangın algılama gibi sistemler, sabit noktalı personel hizmetiyle birlikte aynı yönetim yapısı altında planlanabilir.',
+    },
+    {
+      question: 'Kısa süreli veya etkinlik güvenliği veriliyor mu?',
+      answer:
+        'Evet. Fuar, kongre, konser ve spor organizasyonları için süreli güvenlik kurulumu yapılır. Kapsam ve personel ihtiyacı, etkinlik öncesinde yapılan risk değerlendirmesine göre belirlenir.',
+    },
+  ],
+} as const
+
 /** Ana sayfa kullanım alanları kartları. */
 export const useCases = [
   { title: 'Plazalar', slug: 'plazalar-ve-ofis-binalari', icon: 'Building' },

@@ -85,7 +85,18 @@ export function Footer({ settings, services, hasAnalytics }: FooterProps) {
                 {service.title}
               </FooterLink>
             ))}
-            <FooterLink href="/hizmetler">Tüm Hizmetler</FooterLink>
+
+            {/*
+              Sabit hizmet sayfaları config'ten gelir. Aşağıdaki `slice(1)`
+              footerNav'ın ilk grubunu atladığı için bu grup hiç render
+              edilmiyordu; "Tüm Hizmetler" burada elle yazıldığından eksiklik
+              fark edilmemişti. Artık tek kaynak navigation.ts.
+            */}
+            {footerNav[0]?.items.map((item) => (
+              <FooterLink key={item.href} href={item.href}>
+                {item.label}
+              </FooterLink>
+            ))}
           </FooterColumn>
 
           {/* Kurumsal + Çalışmalar */}

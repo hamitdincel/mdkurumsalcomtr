@@ -18,6 +18,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl('/'), lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: absoluteUrl('/hizmetler'), lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    /*
+     * Sabit route: `getServiceSlugs()` yalnızca veritabanı/statik hizmet
+     * kayıtlarını döner, bu sayfa oradan gelmez. Elle eklenmezse sitemap'te
+     * hiç görünmez.
+     */
+    {
+      url: absoluteUrl('/hizmetler/yeditepe-guvenlik'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     { url: absoluteUrl('/sektorler'), lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: absoluteUrl('/projeler'), lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: absoluteUrl('/once-sonra'), lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
