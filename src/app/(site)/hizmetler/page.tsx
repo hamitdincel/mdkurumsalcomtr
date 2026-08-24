@@ -45,7 +45,7 @@ export default async function ServicesPage() {
           ) : (
             <Reveal stagger>
               <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {services.map((service) => (
+                {services.map((service, index) => (
                   <RevealItem as="li" key={service.slug}>
                     <ServiceCard
                       title={service.title}
@@ -53,6 +53,12 @@ export default async function ServicesPage() {
                       shortDescription={service.shortDescription}
                       icon={service.icon}
                       image={service.heroImage}
+                      /*
+                       * Izgara lg'de 3 sütun; ilk satır fold üstünde ve LCP
+                       * öğesi oradan çıkıyor. Lazy bırakılınca tarayıcı
+                       * görseli ancak layout sonrası keşfediyordu.
+                       */
+                      priority={index < 3}
                       className="h-full"
                     />
                   </RevealItem>
