@@ -63,9 +63,23 @@ export async function setSessionCookie(user: SessionUser): Promise<void> {
   })
 }
 
+/**
+ * Oturum cookie'sini siler.
+ *
+ * Nitelikler yazarkenkiyle BİREBİR aynı olmalı: `__Host-` önekli bir cookie
+ * Secure olmadan gönderilirse tarayıcı Set-Cookie başlığını tümüyle yok sayar.
+ * Bu durumda cookie silinmez ve kullanıcı çıkış yaptığını sanarken oturumu
+ * açık kalır.
+ */
 export async function clearSessionCookie(): Promise<void> {
   const cookieStore = await cookies()
-  cookieStore.set(COOKIE_NAME, '', { httpOnly: true, path: '/', maxAge: 0 })
+  cookieStore.set(COOKIE_NAME, '', {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  })
 }
 
 /** Aktif oturumu döner; oturum yoksa null. */
