@@ -41,6 +41,28 @@ export const siteImages = {
 } as const
 
 /**
+ * Yeditepe Özel Güvenlik görselleri (/hizmetler/yeditepe-guvenlik).
+ *
+ * Müşteri tarafından sağlanan MARKA TANITIM görselleri. Hizmetin ne olduğunu
+ * anlatmak için kullanılırlar; tamamlanmış bir işin belgesi olarak
+ * sunulmazlar. Bu yüzden "Projeler" ve "Öncesi & Sonrası" bölümlerinde
+ * kullanılmazlar — oralar kanıt bölümleridir ve sahada çekilmiş fotoğraf
+ * gerektirir.
+ *
+ * Kaynak PNG'ler ~2 MB idi; 1200-1600px genişliğe indirilip WebP'ye
+ * çevrildi (toplam 14 MB → 756 KB).
+ */
+export const securityImages = {
+  stadium: '/images/guvenlik/stadyum-guvenligi.webp',
+  vip: '/images/guvenlik/vip-koruma.webp',
+  hospital: '/images/guvenlik/hastane-guvenligi.webp',
+  facility: '/images/guvenlik/tesis-yonetimi.webp',
+  xray: '/images/guvenlik/x-ray-kontrol.webp',
+  mall: '/images/guvenlik/avm-giris-kontrol.webp',
+  k9: '/images/guvenlik/k9-arama-ekibi.webp',
+} as const
+
+/**
  * Hizmet slug'ına göre varsayılan kapak görselleri.
  * Karşılığı olmayan hizmetlerde görsel gösterilmez (placeholder blok çıkar) —
  * alakasız bir stok görsel yerleştirilmez.

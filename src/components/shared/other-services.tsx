@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Container, Section, SectionHeader, type SectionTone } from './section'
 import { Icon } from './icon'
+import { MediaImage } from './media-image'
+import { Reveal, RevealItem } from './reveal'
 import { Button } from '@/components/ui/button'
 import { otherServiceGroups } from '@/config/content'
 import { siteConfig } from '@/config/site'
@@ -14,10 +16,16 @@ import { toTelHref } from '@/lib/utils'
  * Grup çatısı altındaki tamamlayıcı hizmetler (özel güvenlik, elektronik
  * güvenlik, tesis yönetimi).
  *
- * TASARIM KARARI: Bu blok bilinçli olarak DÜŞÜK VURGULU tutulur. Sitenin ana
- * odağı drone destekli yüzey temizliğidir; bu yüzden burada fotoğraf, büyük
- * kart veya renkli vurgu kullanılmaz. Dört sütunlu sade bir liste, hizmetlerin
- * varlığını duyurur ama drone içeriğiyle görsel olarak yarışmaz.
+ * ÖNCE: fotoğrafsız, dört sütunlu, tıklanamayan bir madde listesiydi. Bloğun
+ * düşük vurgulu tutulması bilinçli bir karardı (ana odak drone temizliği) ama
+ * pratikte hizmetler görünmez kalıyordu: ne kapak görseli, ne detay sayfası,
+ * ne de tıklanacak bir yüzey vardı.
+ *
+ * ŞİMDİ: her başlık kendi kapak görseli olan, tamamı tıklanabilir bir kart.
+ * Kartlar detay sayfasındaki ilgili bölüme derin bağlantı verir
+ * (/hizmetler/yeditepe-guvenlik#<id>). Vurgu dengesi kart SAYISI ve
+ * KONUMUYLA korunur — blok hâlâ sayfanın sonunda ve dört kart ile sınırlı;
+ * drone hizmetleri bento ızgarasında altı kartla ve sayfanın üstünde durur.
  */
 export function OtherServices({
   tone = 'raised',
@@ -71,60 +79,73 @@ export function OtherServices({
                 tarafından, 5188 sayılı kanun kapsamında verilir.
               </p>
 
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                <a
-                  href={`tel:${toTelHref(security.phone)}`}
-                  className="text-sm font-medium text-brand-600 underline-offset-4 hover:underline"
-                >
-                  {security.phone}
-                </a>
-                <Link
-                  href="/hizmetler/yeditepe-guvenlik"
-                  className="text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
-                >
-                  Detaylı bilgi
-                </Link>
-              </div>
+              <a
+                href={`tel:${toTelHref(security.phone)}`}
+                className="text-sm font-medium text-brand-600 underline-offset-4 hover:underline"
+              >
+                {security.phone}
+              </a>
             </div>
           }
         />
 
-        {/*
-          Önce doğrudan /iletisim'e gidiyordu; ziyaretçi hizmetin kapsamını
-          görmeden iletişim formuna düşüyordu. Artık detay sayfasına gider,
-          arama seçeneği orada da var.
-        */}
-        <Button asChild variant="secondary" size="md" className="mt-8">
+        <Reveal stagger className="mt-12">
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {otherServiceGroups.map((group) => (
+              <RevealItem as="li" key={group.id}>
+                <article className="group panel relative flex h-full flex-col overflow-hidden rounded-md transition-colors duration-300 hover:border-line-strong">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-surface-sunken">
+                    <MediaImage
+                      src={group.image}
+                      alt={group.title}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                    />
+                    {/* İkon rozeti görselin alt kenarına oturur, başlığa köprü kurar */}
+                    <span className="absolute bottom-3 left-3 flex size-10 items-center justify-center rounded-sm bg-paper text-brand-600 shadow-md">
+                      <Icon name={group.icon} className="size-5" />
+                    </span>
+                  </div>
+
+                  <div className="flex flex-1 flex-col gap-3 p-5">
+                    <h3 className="text-base leading-snug font-semibold text-ink">
+                      {/*
+                        after:inset-0 kartın TAMAMINI tıklanabilir yapar; ayrıca
+                        bir bağlantı katmanı eklenmez, böylece ekran okuyucuda
+                        tek ve anlamlı bir bağlantı kalır.
+                      */}
+                      <Link
+                        href={`/hizmetler/yeditepe-guvenlik#${group.id}`}
+                        className="after:absolute after:inset-0"
+                      >
+                        {group.title}
+                      </Link>
+                    </h3>
+
+                    <p className="line-clamp-3 text-sm leading-relaxed text-ink-muted">
+                      {group.description}
+                    </p>
+
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-brand-600">
+                      Detayları Gör
+                      <ArrowUpRight
+                        className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        aria-hidden
+                      />
+                    </span>
+                  </div>
+                </article>
+              </RevealItem>
+            ))}
+          </ul>
+        </Reveal>
+
+        <Button asChild variant="secondary" size="md" className="mt-10">
           <Link href="/hizmetler/yeditepe-guvenlik">
-            Güvenlik hizmetlerini inceleyin
+            Tüm güvenlik hizmetlerini inceleyin
             <ArrowRight className="size-4" aria-hidden />
           </Link>
         </Button>
-
-        <div className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {otherServiceGroups.map((group) => (
-            <div key={group.title} className="flex flex-col gap-4 border-t border-line pt-6">
-              <span className="flex size-10 items-center justify-center rounded-sm bg-brand-50 text-brand-600">
-                <Icon name={group.icon} className="size-5" />
-              </span>
-
-              <div className="flex flex-col gap-2">
-                <h3 className="text-base leading-snug font-semibold text-ink">{group.title}</h3>
-                <p className="text-sm leading-relaxed text-ink-muted">{group.description}</p>
-              </div>
-
-              <ul className="flex flex-col gap-2">
-                {group.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-ink-muted">
-                    <Check className="mt-0.5 size-3.5 shrink-0 text-brand-600" aria-hidden />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
       </Container>
     </Section>
   )

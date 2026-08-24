@@ -9,6 +9,8 @@
  * her şey yalnızca admin panelinden gerçek veri girildiğinde gösterilir.
  */
 
+import { securityImages } from './images'
+
 export type StaticService = {
   slug: string
   title: string
@@ -765,16 +767,22 @@ export const referenceGroups: ReferenceGroup[] = [
  * geçse dahi doğrulanabilir olana kadar dışarıda bırakılır.
  */
 export type OtherServiceGroup = {
+  /** Detay sayfasındaki bölüm çapası — kartlar buraya derin bağlantı verir. */
+  id: string
   title: string
   icon: string
   description: string
+  /** Kart kapak görseli (bkz. securityImages). */
+  image: string
   items: string[]
 }
 
 export const otherServiceGroups: OtherServiceGroup[] = [
   {
+    id: 'ozel-guvenlik',
     title: 'Özel Güvenlik Hizmetleri',
     icon: 'ShieldCheck',
+    image: securityImages.hospital,
     description:
       '5188 sayılı Özel Güvenlik Hizmetlerine Dair Kanun kapsamında, eğitimli ve kimlik kartlı personelle sabit noktalı güvenlik hizmeti.',
     items: [
@@ -789,8 +797,10 @@ export const otherServiceGroups: OtherServiceGroup[] = [
     ],
   },
   {
+    id: 'organizasyon-koruma',
     title: 'Organizasyon ve Özel Koruma',
     icon: 'Users',
+    image: securityImages.vip,
     description:
       'Süreli etkinlikler ve kişiye özel koruma ihtiyaçları için, risk değerlendirmesi sonrasında kurulan geçici güvenlik organizasyonu.',
     items: [
@@ -803,8 +813,10 @@ export const otherServiceGroups: OtherServiceGroup[] = [
     ],
   },
   {
+    id: 'elektronik-guvenlik',
     title: 'Elektronik Güvenlik Sistemleri',
     icon: 'Cpu',
+    image: securityImages.mall,
     description:
       'Tesisin ihtiyacı keşif ve risk analizi sonrasında belirlenir; sistemler kurulur, devreye alınır ve işletilir.',
     items: [
@@ -818,8 +830,10 @@ export const otherServiceGroups: OtherServiceGroup[] = [
     ],
   },
   {
+    id: 'tesis-yonetimi',
     title: 'Tesis Yönetimi ve Destek Hizmetleri',
     icon: 'Workflow',
+    image: securityImages.facility,
     description:
       'Güvenlik dışındaki operasyonel ihtiyaçlar; aynı yönetim ve denetim yapısı altında yürütülür.',
     items: [

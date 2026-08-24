@@ -10,9 +10,11 @@ import { Container, Section, SectionHeader } from '@/components/shared/section'
 import { Reveal, RevealItem } from '@/components/shared/reveal'
 import { FaqAccordion } from '@/components/shared/faq-accordion'
 import { Icon } from '@/components/shared/icon'
+import { MediaImage } from '@/components/shared/media-image'
 import { BlueprintBackground, RadialLight } from '@/components/shared/technical'
 import { Button } from '@/components/ui/button'
 import { otherServiceGroups, yeditepeSecurity } from '@/config/content'
+import { securityImages } from '@/config/images'
 import { siteConfig } from '@/config/site'
 import { toTelHref } from '@/lib/utils'
 
@@ -71,12 +73,13 @@ export default function YeditepeSecurityPage() {
       />
 
       {/*
-        Fotoğrafsız `media` varyantı: teknik ızgara + marka ışığı zemini
-        kullanılır. Stok bir güvenlik görseli konmaz — sahada çekilmiş bir
-        fotoğraf olmadığı sürece görsel iddiası da uydurma sayılır.
+        Hero görseli müşterinin sağladığı marka tanıtım fotoğrafı. Stok bir
+        güvenlik görseli kullanılmaz; tamamlanmış bir işin belgesi olarak da
+        sunulmaz (bkz. securityImages).
       */}
       <PageHero
         variant="media"
+        image={securityImages.stadium}
         eyebrow="Grup Hizmeti"
         title={security.brand}
         description={security.scope}
@@ -115,7 +118,7 @@ export default function YeditepeSecurityPage() {
                 {/*
                   Açık levha: logonun koyu gövdesi koyu temada zemine karışıyor.
                 */}
-                <span className="flex size-14 shrink-0 items-center justify-center rounded-sm bg-paper p-1.5">
+                <span className="bg-paper flex size-14 shrink-0 items-center justify-center rounded-sm p-1.5">
                   <Image
                     src={security.logo}
                     alt={`${security.brand} logosu`}
@@ -125,20 +128,20 @@ export default function YeditepeSecurityPage() {
                   />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-base font-semibold text-ink">{security.brand}</p>
-                  <p className="text-sm leading-snug text-ink-subtle">{security.name}</p>
+                  <p className="text-ink text-base font-semibold">{security.brand}</p>
+                  <p className="text-ink-subtle text-sm leading-snug">{security.name}</p>
                 </div>
               </div>
 
-              <dl className="flex flex-col gap-4 border-t border-line pt-5">
+              <dl className="border-line flex flex-col gap-4 border-t pt-5">
                 <div className="flex items-start gap-3">
-                  <Phone className="mt-0.5 size-4 shrink-0 text-brand-600" aria-hidden />
+                  <Phone className="text-brand-600 mt-0.5 size-4 shrink-0" aria-hidden />
                   <div>
                     <dt className="tech-label text-ink-subtle">Telefon</dt>
                     <dd>
                       <a
                         href={`tel:${toTelHref(security.phone)}`}
-                        className="text-sm font-medium text-ink underline-offset-4 transition-colors hover:text-brand-600 hover:underline"
+                        className="text-ink hover:text-brand-600 text-sm font-medium underline-offset-4 transition-colors hover:underline"
                       >
                         {security.phone}
                       </a>
@@ -147,10 +150,10 @@ export default function YeditepeSecurityPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 size-4 shrink-0 text-brand-600" aria-hidden />
+                  <MapPin className="text-brand-600 mt-0.5 size-4 shrink-0" aria-hidden />
                   <div>
                     <dt className="tech-label text-ink-subtle">Adres</dt>
-                    <dd className="text-sm leading-relaxed text-ink-muted">{security.address}</dd>
+                    <dd className="text-ink-muted text-sm leading-relaxed">{security.address}</dd>
                   </div>
                 </div>
               </dl>
@@ -171,35 +174,106 @@ export default function YeditepeSecurityPage() {
           <Reveal stagger className="mt-14">
             <ul className="grid gap-6 lg:grid-cols-2">
               {otherServiceGroups.map((group, index) => (
-                <RevealItem as="li" key={group.title}>
-                  <article className="panel flex h-full flex-col gap-5 rounded-md p-6 md:p-8">
-                    <div className="flex items-start justify-between gap-4">
-                      <span className="flex size-12 shrink-0 items-center justify-center rounded-sm bg-brand-50 text-brand-600">
+                /*
+                  `id` + scroll-mt: "Diğer hizmetlerimiz" kartları buraya derin
+                  bağlantı verir; sabit header'ın altında kalmaması için üstten
+                  boşluk bırakılır.
+                */
+                <RevealItem as="li" key={group.id}>
+                  <article
+                    id={group.id}
+                    className="panel flex h-full scroll-mt-28 flex-col overflow-hidden rounded-md"
+                  >
+                    <div className="bg-surface-sunken relative aspect-[16/10]">
+                      <MediaImage
+                        src={group.image}
+                        alt={group.title}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                      <span className="bg-paper text-brand-600 absolute bottom-4 left-4 flex size-12 items-center justify-center rounded-sm shadow-md">
                         <Icon name={group.icon} className="size-6" />
                       </span>
-                      <span className="tech-label text-ink-subtle">
+                      <span className="tech-label bg-scrim/70 absolute top-4 right-4 rounded-xs px-2 py-1 text-white backdrop-blur-sm">
                         {String(index + 1).padStart(2, '0')}
                       </span>
                     </div>
 
-                    <div className="flex flex-col gap-2.5">
-                      <h3 className="text-xl leading-snug font-semibold text-ink">{group.title}</h3>
-                      <p className="text-base leading-relaxed text-ink-muted">{group.description}</p>
-                    </div>
+                    <div className="flex flex-1 flex-col gap-5 p-6 md:p-8">
+                      <div className="flex flex-col gap-2.5">
+                        <h3 className="text-ink text-xl leading-snug font-semibold">
+                          {group.title}
+                        </h3>
+                        <p className="text-ink-muted text-base leading-relaxed">
+                          {group.description}
+                        </p>
+                      </div>
 
-                    <ul className="mt-auto grid gap-2.5 border-t border-line pt-5 sm:grid-cols-2">
-                      {group.items.map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-ink-muted">
-                          <Check className="mt-0.5 size-3.5 shrink-0 text-brand-600" aria-hidden />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                      <ul className="border-line mt-auto grid gap-2.5 border-t pt-5 sm:grid-cols-2">
+                        {group.items.map((item) => (
+                          <li key={item} className="text-ink-muted flex items-start gap-2 text-sm">
+                            <Check
+                              className="text-brand-600 mt-0.5 size-3.5 shrink-0"
+                              aria-hidden
+                            />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </article>
                 </RevealItem>
               ))}
             </ul>
           </Reveal>
+        </Container>
+      </Section>
+
+      {/* --- Özel ekipman ve ekipler --- */}
+      <Section spacing="md" tone="light">
+        <Container>
+          <SectionHeader
+            eyebrow="Ekipman"
+            title="Talebe göre kurulan özel ekip ve cihazlar"
+            description="Yukarıdaki başlıkların içinde yer alan, ayrıca planlanması gereken iki kalem."
+          />
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {[
+              {
+                image: securityImages.k9,
+                title: 'K9 arama köpeği ekipleri',
+                description:
+                  'Etkinlik öncesi alan taraması ve giriş kontrolünde, eğitimli köpek ve görevlisinden oluşan ekiple çalışılır.',
+                href: '#organizasyon-koruma',
+              },
+              {
+                image: securityImages.xray,
+                title: 'X-Ray ve kapı tipi dedektör',
+                description:
+                  'Giriş noktalarında bagaj ve kişi kontrolü; cihaz kurulumu, operatör görevlendirmesi ve işletimi birlikte planlanır.',
+                href: '#elektronik-guvenlik',
+              },
+            ].map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                className="group panel hover:border-line-strong relative flex flex-col overflow-hidden rounded-md transition-colors duration-300"
+              >
+                <div className="bg-surface-sunken relative aspect-[16/10]">
+                  <MediaImage
+                    src={item.image}
+                    alt={item.title}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                  />
+                </div>
+                <div className="flex flex-col gap-2.5 p-6">
+                  <h3 className="text-ink text-lg leading-snug font-semibold">{item.title}</h3>
+                  <p className="text-ink-muted text-sm leading-relaxed">{item.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
         </Container>
       </Section>
 
@@ -209,22 +283,18 @@ export default function YeditepeSecurityPage() {
         <RadialLight position="15% 0%" color="rgba(17,85,240,0.18)" />
 
         <Container className="relative">
-          <SectionHeader
-            eyebrow="Süreç"
-            title="Bir güvenlik hizmeti nasıl kuruluyor?"
-            dark
-          />
+          <SectionHeader eyebrow="Süreç" title="Bir güvenlik hizmeti nasıl kuruluyor?" dark />
           <ol className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {yeditepeSecurity.process.map((step, index) => (
               <li
                 key={step.title}
-                className="flex flex-col gap-3 border-t-2 border-line-inverse pt-5 transition-colors hover:border-signal"
+                className="border-line-inverse hover:border-signal flex flex-col gap-3 border-t-2 pt-5 transition-colors"
               >
-                <span className="font-display text-sm font-bold text-brand-600">
+                <span className="font-display text-brand-600 text-sm font-bold">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="text-base font-semibold text-ink-inverse">{step.title}</h3>
-                <p className="text-sm leading-relaxed text-ink-inverse-muted">{step.description}</p>
+                <h3 className="text-ink-inverse text-base font-semibold">{step.title}</h3>
+                <p className="text-ink-inverse-muted text-sm leading-relaxed">{step.description}</p>
               </li>
             ))}
           </ol>
