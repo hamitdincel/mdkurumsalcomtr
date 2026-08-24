@@ -1,10 +1,12 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { Mail, MapPin, Phone, Clock } from 'lucide-react'
+import { Mail, MapPin, Phone, Clock, Code2, ArrowUpRight } from 'lucide-react'
 import { Brand } from './brand'
 import { CookiePreferencesButton } from '@/components/analytics/cookie-consent'
 import { TrackedLink } from '@/components/shared/tracked-link'
 import { footerNav, legalNav } from '@/config/navigation'
 import { siteConfig } from '@/config/site'
+import { siteImages } from '@/config/images'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { toTelHref } from '@/lib/utils'
 import type { ResolvedSettings } from '@/services/settings-service'
@@ -137,6 +139,63 @@ export function Footer({ settings, services, hasAnalytics }: FooterProps) {
               {settings.workingHours}
             </ContactItem>
           )}
+
+          {/*
+            Geliştirici künyesi. Alt bardan buraya alındı: alt bar telif +
+            görünüm seçici + dört yasal bağlantıyla zaten kalabalıktı, künye
+            orada satır sonuna sıkışıyordu. İletişim ızgarasının son hücresinde
+            adresin sağında duruyor ve komşularından bir kademe büyük.
+            Izgarada son sırada: çalışma saatleri girilirse iş bilgisi önce gelir.
+          */}
+          <div className="flex flex-col gap-1.5">
+            <span className="flex items-center gap-2 text-xs font-medium tracking-wide text-ink-inverse-muted/70 uppercase">
+              <Code2 className="size-4" aria-hidden />
+              Yazılım
+            </span>
+            {/*
+              Düz metin olarak durduğunda komşularından büyük ve koyu olması
+              hata gibi görünüyordu: boyutu haklı çıkaran bir kimlik yoktu.
+              Logo + ad + alan adı üçlüsü, boyutu gerekçelendiren küçük bir
+              marka kilidi kuruyor; ok işareti sitenin geri kalanında kullanılan
+              dış bağlantı işaretiyle aynı.
+
+              Dış bağlantı: yeni sekme + rel="noreferrer" (opener sızıntısı).
+            */}
+            <a
+              href={siteConfig.developer.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex w-fit items-center gap-2.5"
+            >
+              {/*
+                `unoptimized`: kaynak bir SVG. next/image optimizasyon hattı
+                SVG'yi varsayılan olarak reddeder; bu bayrakla dosya /public'ten
+                doğrudan servis edilir ve `dangerouslyAllowSVG` açmak gerekmez.
+              */}
+              <Image
+                src={siteImages.hdYazilimLogo}
+                alt=""
+                width={36}
+                height={36}
+                unoptimized
+                className="size-9 shrink-0 transition-transform duration-200 group-hover:scale-105"
+              />
+
+              <span className="flex flex-col leading-tight">
+                <span className="text-sm font-semibold text-ink-inverse transition-colors group-hover:text-brand-500">
+                  {siteConfig.developer.name}
+                </span>
+                <span className="text-xs text-ink-inverse-muted">
+                  {siteConfig.developer.domain}
+                </span>
+              </span>
+
+              <ArrowUpRight
+                aria-hidden
+                className="size-3.5 shrink-0 text-ink-inverse-muted transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-500"
+              />
+            </a>
+          </div>
         </div>
 
         {/* Alt bar */}

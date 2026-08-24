@@ -30,6 +30,14 @@ export const siteImages = {
    * kalkanın içindeki beyaz "ÖZEL GÜVENLİK" yazısı korundu.
    */
   yeditepeLogo: '/images/yeditepe-ozel-guvenlik.png',
+
+  /**
+   * Footer künyesindeki geliştirici logosu — HD Yazılım (hamitdincel.com).
+   * Kaynak: hamitdincelcom projesindeki public/brand/icon.svg, birebir kopya.
+   * Kendi koyu yuvarlatılmış zeminini taşıdığı için ayrıca çerçeve/kırpma
+   * gerekmez ve açık/koyu temanın ikisinde de okunur.
+   */
+  hdYazilimLogo: '/images/hd-yazilim.svg',
 } as const
 
 /**

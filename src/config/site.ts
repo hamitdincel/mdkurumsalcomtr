@@ -103,6 +103,14 @@ export const siteConfig = {
 
   /** Varsayılan OG görseli (bkz. src/config/images.ts). */
   ogImage: siteImages.ogDefault,
+
+  /** Footer alt barında gösterilen geliştirici künyesi. */
+  developer: {
+    name: 'HD Yazılım',
+    url: 'https://www.hamitdincel.com/',
+    /** Künyede adın altında gösterilen alan adı. */
+    domain: 'hamitdincel.com',
+  },
 } as const
 
 export type SiteConfig = typeof siteConfig
