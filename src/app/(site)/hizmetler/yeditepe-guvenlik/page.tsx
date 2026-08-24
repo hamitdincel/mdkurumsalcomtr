@@ -181,16 +181,16 @@ export default function YeditepeSecurityPage() {
         </Container>
       </Section>
 
-      {/* --- Dört başlık --- */}
+      {/*
+        --- Dört başlık ---
+        Bölüm başlığı bilinçli olarak YOK. Bir üstteki "Kurumsal" bölümü zaten
+        hizmetin ne olduğunu ve kimin verdiğini anlatıyordu; araya ikinci bir
+        başlık girdiğinde ziyaretçi kartlara ulaşmadan önce üçüncü bir metin
+        bloğu daha okumak zorunda kalıyordu. Kartlar kendilerini anlatıyor.
+      */}
       <Section spacing="md" id="kapsam" tone="raised" className="scroll-mt-24">
         <Container>
-          <SectionHeader
-            eyebrow="Kapsam"
-            title="Dört başlık altında güvenlik hizmetleri"
-            description="Hangi başlığın gerekli olduğu, tesisin yapısı ve risk değerlendirmesi sonrasında belirlenir. Başlıklar birlikte de alınabilir."
-          />
-
-          <Reveal stagger className="mt-14">
+          <Reveal stagger>
             <ul className="grid gap-6 sm:grid-cols-2">
               {securityServices.map((service, index) => (
                 <RevealItem as="li" key={service.slug}>
