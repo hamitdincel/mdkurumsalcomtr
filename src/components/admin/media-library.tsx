@@ -38,26 +38,40 @@ export function MediaLibrary({
     const files = Array.from(event.target.files ?? [])
     if (files.length === 0) return
 
+    const input = event.target
+
     setError(null)
     setUploading(true)
 
-    for (const file of files) {
-      if (file.size > MAX_UPLOAD_BYTES) {
-        setError(`"${file.name}" 15 MB sınırını aşıyor.`)
-        continue
+    try {
+      for (const file of files) {
+        if (file.size > MAX_UPLOAD_BYTES) {
+          setError(`"${file.name}" 15 MB sınırını aşıyor.`)
+          continue
+        }
+
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('folder', activeFolder ?? 'genel')
+
+        try {
+          const result = await uploadMediaAction(formData)
+          if (!result.ok) setError(result.error)
+        } catch (uploadError) {
+          // Action'ın kendisi patlarsa (ağ hatası, gövde boyutu sınırı) hata
+          // yakalanmazsa arayüz sonsuza kadar "Yükleniyor…" durumunda kalır ve
+          // kullanıcı hiçbir şey olmamış gibi görür.
+          console.error('[media] Yükleme başarısız:', uploadError)
+          setError(
+            `"${file.name}" yüklenemedi. Bağlantı koptu ya da sunucu dosyayı reddetti. Ayrıntı için tarayıcı konsoluna bakın.`,
+          )
+        }
       }
-
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('folder', activeFolder ?? 'genel')
-
-      const result = await uploadMediaAction(formData)
-      if (!result.ok) setError(result.error)
+    } finally {
+      setUploading(false)
+      input.value = ''
+      router.refresh()
     }
-
-    setUploading(false)
-    event.target.value = ''
-    router.refresh()
   }
 
   const handleDelete = async (asset: Asset) => {

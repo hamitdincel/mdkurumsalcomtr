@@ -11,6 +11,9 @@ import { MAX_UPLOAD_BYTES } from '@/lib/security/upload-constants'
 
 type PickerAsset = { id: string; url: string; filename: string; alt: string | null }
 
+const UPLOAD_FAILED_MESSAGE =
+  'Dosya yüklenemedi. Bağlantı koptu ya da sunucu dosyayı reddetti. Ayrıntı için tarayıcı konsoluna bakın.'
+
 /**
  * Görsel alanı: doğrudan URL girilebilir, kütüphaneden seçilebilir veya
  * yeni dosya yüklenebilir.
@@ -43,7 +46,8 @@ export function MediaPickerField({
   }
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const input = event.target
+    const file = input.files?.[0]
     if (!file) return
 
     setUploadError(null)
@@ -54,21 +58,31 @@ export function MediaPickerField({
     }
 
     setUploading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('folder', 'icerik')
 
-    const result = await uploadMediaAction(formData)
-    setUploading(false)
-    event.target.value = ''
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('folder', 'icerik')
 
-    if (!result.ok) {
-      setUploadError(result.error)
-      return
+      const result = await uploadMediaAction(formData)
+
+      if (!result.ok) {
+        setUploadError(result.error)
+        return
+      }
+
+      setValue(result.url)
+      setOpen(false)
+    } catch (error) {
+      // Action'ın kendisi patlarsa (ağ hatası, gövde boyutu sınırı) hata
+      // yakalanmazsa arayüz sonsuza kadar "Yükleniyor…" durumunda kalır ve
+      // kullanıcı hiçbir şey olmamış gibi görür.
+      console.error('[media] Yükleme başarısız:', error)
+      setUploadError(UPLOAD_FAILED_MESSAGE)
+    } finally {
+      setUploading(false)
+      input.value = ''
     }
-
-    setValue(result.url)
-    setOpen(false)
   }
 
   return (

@@ -43,6 +43,13 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    serverActions: {
+      // Medya yüklemesi bir server action üzerinden yapılıyor ve action gövdesi
+      // varsayılan olarak 1 MB ile sınırlı. Sınır aşılınca Next 413/500 döner,
+      // action promise'i reject olur ve arayüzde hiçbir şey olmamış gibi görünür.
+      // MAX_UPLOAD_BYTES 15 MB; multipart boundary/başlık payı için 16 MB.
+      bodySizeLimit: '16mb',
+    },
   },
 }
 
