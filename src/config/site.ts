@@ -69,7 +69,10 @@ export const siteConfig = {
       scope: 'Özel güvenlik ve elektronik güvenlik hizmetleri',
       phone: '0532 161 04 05',
       phoneRaw: '+905321610405',
+      email: 'yeditepekoruma@gmail.com',
       address: 'Atatürk Mah. İkitelli Cad. No:17, Küçükçekmece / İstanbul',
+      /** Tanıtım dokümanının kapak sloganı. */
+      tagline: 'Hayatınızda daha fazla huzur ve güven için',
     },
   ] as const,
 

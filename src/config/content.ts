@@ -784,15 +784,17 @@ export const otherServiceGroups: OtherServiceGroup[] = [
     icon: 'ShieldCheck',
     image: securityImages.hospital,
     description:
-      '5188 sayılı Özel Güvenlik Hizmetlerine Dair Kanun kapsamında, eğitimli ve kimlik kartlı personelle sabit noktalı güvenlik hizmeti.',
+      '5188 sayılı kanunun öngördüğü koşullarda, güvenlik eğitimini almış ve özel güvenlik kimlik kartına sahip personelle sabit noktalı koruma hizmeti.',
     items: [
-      'Site, tesis ve konut güvenliği',
-      'Plaza ve iş merkezi güvenliği',
-      'Alışveriş merkezi güvenliği',
-      'Hastane güvenliği',
-      'Eğitim kurumları güvenliği',
-      'Fabrika ve şantiye güvenliği',
+      'Alışveriş merkezleri',
+      'Akıllı bina, site ve plazalar',
+      'Hastaneler ve sağlık tesisleri',
+      'Okullar ve eğitim kurumları',
+      'Oteller',
+      'Özel konutlar',
       'Kamu kurum ve kuruluşları',
+      'Belediyeler ve bağlı kuruluşlar',
+      'Fabrika ve şantiyeler',
       'Toplu ulaşım noktaları',
     ],
   },
@@ -802,14 +804,16 @@ export const otherServiceGroups: OtherServiceGroup[] = [
     icon: 'Users',
     image: securityImages.vip,
     description:
-      'Süreli etkinlikler ve kişiye özel koruma ihtiyaçları için, risk değerlendirmesi sonrasında kurulan geçici güvenlik organizasyonu.',
+      'Kısa süreli organizasyonlar ve kişiye özel koruma ihtiyaçları için, güvenlik risk değerlendirmesi sonrasında kurulan geçici güvenlik organizasyonu.',
     items: [
-      'Fuar, kongre ve konser güvenliği',
+      'Fuar, konser ve seminer güvenliği',
       'Stadyum ve spor tesisi güvenliği',
+      'Havaalanı güvenliği',
       'VIP ve yakın koruma',
       'Kısa süreli (part-time) güvenlik',
-      'K9 arama köpeği ekipleri',
+      'K9 patlayıcı arama ekipleri',
       'Medya ve basın kuruluşları',
+      'Özel karşılama ve uğurlamalar',
     ],
   },
   {
@@ -818,29 +822,37 @@ export const otherServiceGroups: OtherServiceGroup[] = [
     icon: 'Cpu',
     image: securityImages.mall,
     description:
-      'Tesisin ihtiyacı keşif ve risk analizi sonrasında belirlenir; sistemler kurulur, devreye alınır ve işletilir.',
+      'Tesisin ihtiyacı olan donanım, gerekli analizler yapıldıktan sonra kurulur ve işletilir.',
     items: [
-      'CCTV kamera ve gözetim merkezi',
+      'CCTV kumanda ve gözetim merkezleri',
+      'CCTV kamera sistemleri',
+      'Yangın, soygun ve gaz ihbar alarm sistemleri',
+      'Elektronik turnike ve bariyerler',
+      'X-Ray cihazları',
+      'Kapı ve el tipi metal dedektörleri',
       'Kartlı geçiş (access) sistemleri',
-      'Yangın algılama, ihbar ve söndürme',
-      'X-Ray kontrol cihazları',
-      'Kapı ve el tipi metal dedektör',
-      'Turnike ve bariyer sistemleri',
       'Bekçi tur kontrol sistemi',
     ],
   },
   {
-    id: 'tesis-yonetimi',
-    title: 'Tesis Yönetimi ve Destek Hizmetleri',
+    /*
+     * Diğer üç başlık "ne verildiğini", bu başlık "nasıl işletildiğini"
+     * anlatır (tanıtım dokümanındaki "Bina ve Tesis Güvenliği" bölümü).
+     * Mekân türleri birinci başlıkta listelendiği için burada tekrarlanmaz.
+     */
+    id: 'bina-tesis',
+    title: 'Bina ve Tesis Güvenliği',
     icon: 'Workflow',
     image: securityImages.facility,
     description:
-      'Güvenlik dışındaki operasyonel ihtiyaçlar; aynı yönetim ve denetim yapısı altında yürütülür.',
+      'Proje kapsamındaki alanlarda gözetim ve denetim; etkin devriye sistemiyle kurulan sistemli bir güvenlik ağı.',
     items: [
-      'Bina ve tesis yönetimi',
-      'Genel temizlik hizmetleri',
-      'Personel temini ve insan kaynakları',
-      'Özel güvenlik eğitim hizmetleri',
+      'Giriş ve çıkış kontrolleri',
+      'Devriye sistemi ve tur kontrolü',
+      'Güvenlik sistemleri operatörlüğü',
+      'Ziyaretçi kayıt ve yönlendirme',
+      'Acil durumlarda müdahale',
+      'Site ve konut güvenliği',
     ],
   },
 ]
@@ -859,31 +871,82 @@ export const otherServiceGroups: OtherServiceGroup[] = [
  * siteConfig.company altında toplanır ve boş oldukları sürece gösterilmez.
  */
 export const yeditepeSecurity = {
-  /** Bir güvenlik hizmetinin nasıl kurulduğu. Süre/adet taahhüdü içermez. */
+  /**
+   * Süreç. Her adım tanıtım dokümanlarında yazılı olana dayanır; süre veya
+   * adet taahhüdü eklenmemiştir. Tek istisna gece denetim sayısıdır ve o da
+   * MD GROUP kataloğunda açıkça "ayda 4 kez" olarak geçer.
+   */
   process: [
     {
       title: 'Keşif ve risk değerlendirmesi',
       description:
-        'Tesis yerinde incelenir; giriş-çıkış noktaları, kritik alanlar, aydınlatma ve mevcut önlemler çıkarılır.',
+        'Mekân fiziksel olarak detaylı incelenir; güvenlik noktaları, devriye güzergâhları ve giriş-çıkış kapıları belirlenir.',
     },
     {
-      title: 'Güvenlik planı',
+      title: 'Proje dosyası',
       description:
-        'Nokta sayısı, devriye güzergâhı, vardiya düzeni ve elektronik sistem ihtiyacı bu değerlendirmeye göre belirlenir.',
+        'Görev talimatları, vardiya çizelgesi, riskli noktalar, ziyaretçi kaydı ve acil durum prosedürleri tek dosyada toplanır.',
     },
     {
-      title: 'Görevlendirme',
+      title: 'Personel temini',
       description:
-        'Özel güvenlik temel eğitimini tamamlamış ve valilikçe düzenlenen kimlik kartını taşıyan personel görevlendirilir.',
+        'Başvuru, mesleki yeterlilik gözlemi ve sağlık taramasından geçen personel, müşteriyle mutabık kalınan plan üzerinden göreve başlar.',
     },
     {
       title: 'Denetim ve raporlama',
       description:
-        'Saha amiri denetimi, tur kontrol kayıtları ve olay raporlarıyla hizmet izlenir; aksaklıklar yazılı olarak paylaşılır.',
+        'Gündüz denetimleri habersiz yapılır; gece denetimleri şirket merkezinden ayda dört kez, plansız olarak gerçekleştirilir.',
     },
   ],
 
-  /** Yalnızca mevzuattan veya grup yapısından doğrulanabilir cevaplar. */
+  /**
+   * Hizmeti satın alanın yükümlülük tarafı. Tamamı MD GROUP kataloğunun
+   * "AVANTAJLARINIZ", "YILLIK İZİN VE HASTALIK BOŞLUKLARI" ve "ÜNİFORMA"
+   * başlıklarından alınmıştır — pazarlama cümlesi değil, sözleşme konusu.
+   */
+  advantages: [
+    {
+      title: 'Personel yükümlülükleri şirkete ait',
+      description:
+        'İstihdam edilen personelin ücret, ihbar ve kıdem tazminatı, SGK ve yan ödemeleri ile mevzuattan doğan diğer borç ve yükümlülükleri hizmeti veren şirkete aittir.',
+    },
+    {
+      title: 'Mali sorumluluk sigortası',
+      description:
+        'Görevlendirilen personel için Özel Güvenlik Mali Sorumluluk Sigortası yaptırılır.',
+    },
+    {
+      title: 'İzin ve hastalık boşlukları doldurulur',
+      description:
+        'Yıllık izin veya beklenmeyen hastalık nedeniyle oluşan boşluklar, görev aksamadan doldurulur; geçici personel en az asli personelle aynı yeterlilikte olur.',
+    },
+    {
+      title: 'Bakanlık onaylı üniforma',
+      description:
+        'Görevlendirilen personel, İçişleri Bakanlığı tarafından onaylanan üniformayı giyer.',
+    },
+  ],
+
+  /** K9 hizmetinin uygulanabildiği alanlar (Yeditepe tanıtımı, K9 sayfası). */
+  k9Areas: [
+    'Kişiye özel',
+    'Tesis içi veya dışı',
+    'Çeşitli etkinlik ve organizasyonlar',
+    'Özel karşılama ve uğurlamalar',
+    'Mevcut projeler',
+  ],
+
+  /** Organizasyonlarda fiziki güvenliği tamamlayan ekipman (part-time hizmetler). */
+  eventEquipment: [
+    'El tipi metal dedektör',
+    'Kapı tipi metal dedektör',
+    'X-Ray kontrol cihazı',
+    'Yönlendirme bantları',
+    'Eskort araçları',
+    'Telsiz',
+  ],
+
+  /** Cevapların tamamı mevzuattan, grup yapısından veya tanıtım dokümanından. */
   faqs: [
     {
       question: 'Güvenlik hizmetini MD Kurumsal mı veriyor?',
@@ -896,19 +959,34 @@ export const yeditepeSecurity = {
         '5188 sayılı Özel Güvenlik Hizmetlerine Dair Kanun ve bu kanunun uygulanmasına ilişkin yönetmelik. Hizmet, bu kapsamda faaliyet izni bulunan şirket ve kimlik kartlı personel ile verilir.',
     },
     {
-      question: 'Görevlendirilen personel hangi belgeleri taşır?',
+      question: 'Personelin SGK, kıdem ve ihbar yükümlülüğü kime ait?',
       answer:
-        'Özel güvenlik görevlisinin temel eğitimi tamamlamış olması ve valilik tarafından düzenlenen özel güvenlik kimlik kartını taşıması gerekir. Kart, görev sırasında görünür biçimde bulundurulur.',
+        'Hizmeti veren şirkete aittir. İstihdam edilen personelin ücret, ihbar ve kıdem tazminatı, Özel Güvenlik Mali Sorumluluk Sigortası, SGK primleri ve yan ödemeleri ile mevzuattan doğan diğer yükümlülükleri şirket tarafından karşılanır; bu konularda işverene rücu edilmez.',
+    },
+    {
+      question: 'Personel izne çıktığında veya hastalandığında görev aksar mı?',
+      answer:
+        'Yıllık izin ve beklenmeyen hastalık nedeniyle oluşan boşluklar, görevin aksamasına fırsat verilmeden doldurulur. Geçici olarak görevlendirilen personelin en az asli personelle aynı yeterlilik ve performans seviyesinde olması sağlanır.',
+    },
+    {
+      question: 'Hizmet nasıl denetleniyor?',
+      answer:
+        'Gündüz çalışan personelin denetimi proje sorumlusu tarafından sürekli yapılır ve şirket merkezinden gelen gündüz denetimleri habersizdir. Gece denetimleri ise merkez tarafından ayda dört kez, haftanın değişik gün ve saatlerinde plansız olarak gerçekleştirilir. Denetimler kontrol formuna göre yapılır ve raporlanır.',
     },
     {
       question: 'Fiziki güvenlik ile elektronik sistemler birlikte alınabilir mi?',
       answer:
-        'Evet. Kamera ve gözetim merkezi, kartlı geçiş, turnike, metal dedektör ve yangın algılama gibi sistemler, sabit noktalı personel hizmetiyle birlikte aynı yönetim yapısı altında planlanabilir.',
+        'Evet. CCTV kumanda ve gözetim merkezleri, kartlı geçiş, turnike ve bariyerler, X-Ray cihazları, metal dedektörleri ve yangın ihbar sistemleri, sabit noktalı personel hizmetiyle birlikte planlanabilir.',
     },
     {
       question: 'Kısa süreli veya etkinlik güvenliği veriliyor mu?',
       answer:
-        'Evet. Fuar, kongre, konser ve spor organizasyonları için süreli güvenlik kurulumu yapılır. Kapsam ve personel ihtiyacı, etkinlik öncesinde yapılan risk değerlendirmesine göre belirlenir.',
+        'Evet. Konser, fuar, seminer ve spor faaliyetleri gibi kısa süreli organizasyonlarda saat ya da vardiya bazında güvenlik hizmeti verilir. Alınacak tedbirler, etkinlik öncesinde yapılan güvenlik risk değerlendirmesi sonucunda belirlenir.',
+    },
+    {
+      question: 'Güvenlik personeli eğitimi de veriliyor mu?',
+      answer:
+        '5188 sayılı kanunun yürürlüğe girmesiyle birlikte açılan eğitim kurumlarında, İstanbul ve İzmir\'de özel güvenlik eğitimi verilmektedir. Eğitim, hem bünyede istihdam edilecek personeli hem de diğer kurum ve kuruluşları kapsar.',
     },
   ],
 } as const

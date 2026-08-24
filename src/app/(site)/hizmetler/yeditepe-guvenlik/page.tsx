@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Check, MapPin, Phone } from 'lucide-react'
+import { ArrowRight, Check, Mail, MapPin, Phone } from 'lucide-react'
 import { buildMetadata } from '@/lib/seo/metadata'
 import { breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/seo/schema'
 import { JsonLd } from '@/components/shared/json-ld'
@@ -82,7 +82,7 @@ export default function YeditepeSecurityPage() {
         image={securityImages.stadium}
         eyebrow="Grup Hizmeti"
         title={security.brand}
-        description={security.scope}
+        description={`${security.tagline}. ${security.scope}.`}
         crumbs={crumbs}
         meta={[
           { label: 'Hizmet Başlığı', value: `${otherServiceGroups.length} grup` },
@@ -110,7 +110,7 @@ export default function YeditepeSecurityPage() {
             <SectionHeader
               eyebrow="Kurumsal"
               title="Güvenlik hizmetleri ayrı bir şirket tarafından veriliyor"
-              description="Drone destekli yüzey temizliği MD Kurumsal'ın uzmanlık alanı. Güvenlik ise 5188 sayılı kanun kapsamında faaliyet gösteren ayrı bir tüzel kişilik gerektirir; bu hizmetler grup bünyesindeki Yeditepe tarafından, kendi ekibi ve kendi iletişim hattıyla yürütülür."
+              description="Drone destekli yüzey temizliği MD Kurumsal'ın uzmanlık alanı. Güvenlik ise 5188 sayılı kanun kapsamında faaliyet gösteren ayrı bir tüzel kişilik gerektirir; bu hizmetler grup bünyesindeki Yeditepe tarafından, kendi ekibi ve kendi iletişim hattıyla yürütülür. Şirket ayrıca İstanbul ve İzmir'de özel güvenlik eğitim kurumu işletiyor."
             />
 
             <div className="panel flex flex-col gap-5 rounded-md p-6 lg:p-7">
@@ -150,6 +150,21 @@ export default function YeditepeSecurityPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
+                  <Mail className="text-brand-600 mt-0.5 size-4 shrink-0" aria-hidden />
+                  <div className="min-w-0">
+                    <dt className="tech-label text-ink-subtle">E-posta</dt>
+                    <dd>
+                      <a
+                        href={`mailto:${security.email}`}
+                        className="text-ink hover:text-brand-600 text-sm font-medium break-all underline-offset-4 transition-colors hover:underline"
+                      >
+                        {security.email}
+                      </a>
+                    </dd>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
                   <MapPin className="text-brand-600 mt-0.5 size-4 shrink-0" aria-hidden />
                   <div>
                     <dt className="tech-label text-ink-subtle">Adres</dt>
@@ -167,7 +182,7 @@ export default function YeditepeSecurityPage() {
         <Container>
           <SectionHeader
             eyebrow="Kapsam"
-            title="Dört başlık altında güvenlik ve destek hizmetleri"
+            title="Dört başlık altında güvenlik hizmetleri"
             description="Hangi başlığın gerekli olduğu, tesisin yapısı ve risk değerlendirmesi sonrasında belirlenir. Başlıklar birlikte de alınabilir."
           />
 
@@ -228,51 +243,61 @@ export default function YeditepeSecurityPage() {
         </Container>
       </Section>
 
-      {/* --- Özel ekipman ve ekipler --- */}
+      {/* --- K9 ve organizasyon ekipmanı --- */}
       <Section spacing="md" tone="light">
         <Container>
-          <SectionHeader
-            eyebrow="Ekipman"
-            title="Talebe göre kurulan özel ekip ve cihazlar"
-            description="Yukarıdaki başlıkların içinde yer alan, ayrıca planlanması gereken iki kalem."
-          />
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+            <article className="panel flex flex-col overflow-hidden rounded-md">
+              <div className="bg-surface-sunken relative aspect-[16/10]">
+                <MediaImage
+                  src={securityImages.k9}
+                  alt="K9 arama köpeği ve görevlisi"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
+                <h2 className="text-ink text-xl leading-snug font-semibold">K9 hizmetleri</h2>
+                <p className="text-ink-muted text-base leading-relaxed">
+                  Bomba ve tanıtılan maddeye duyarlı, Kanada ve Amerika K-9 programlarına göre
+                  eğitilmiş köpekler ve ilgili branşlarda görev yapmış uzman kadro ile çalışılır.
+                </p>
+                <ul className="border-line mt-auto grid gap-2.5 border-t pt-5 sm:grid-cols-2">
+                  {yeditepeSecurity.k9Areas.map((area) => (
+                    <li key={area} className="text-ink-muted flex items-start gap-2 text-sm">
+                      <Check className="text-brand-600 mt-0.5 size-3.5 shrink-0" aria-hidden />
+                      <span>{area}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {[
-              {
-                image: securityImages.k9,
-                title: 'K9 arama köpeği ekipleri',
-                description:
-                  'Etkinlik öncesi alan taraması ve giriş kontrolünde, eğitimli köpek ve görevlisinden oluşan ekiple çalışılır.',
-                href: '#organizasyon-koruma',
-              },
-              {
-                image: securityImages.xray,
-                title: 'X-Ray ve kapı tipi dedektör',
-                description:
-                  'Giriş noktalarında bagaj ve kişi kontrolü; cihaz kurulumu, operatör görevlendirmesi ve işletimi birlikte planlanır.',
-                href: '#elektronik-guvenlik',
-              },
-            ].map((item) => (
-              <a
-                key={item.title}
-                href={item.href}
-                className="group panel hover:border-line-strong relative flex flex-col overflow-hidden rounded-md transition-colors duration-300"
-              >
-                <div className="bg-surface-sunken relative aspect-[16/10]">
-                  <MediaImage
-                    src={item.image}
-                    alt={item.title}
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                  />
-                </div>
-                <div className="flex flex-col gap-2.5 p-6">
-                  <h3 className="text-ink text-lg leading-snug font-semibold">{item.title}</h3>
-                  <p className="text-ink-muted text-sm leading-relaxed">{item.description}</p>
-                </div>
-              </a>
-            ))}
+            <article className="panel flex flex-col overflow-hidden rounded-md">
+              <div className="bg-surface-sunken relative aspect-[16/10]">
+                <MediaImage
+                  src={securityImages.xray}
+                  alt="X-Ray kontrol cihazı ve operatörü"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
+                <h2 className="text-ink text-xl leading-snug font-semibold">
+                  Organizasyon ekipmanları
+                </h2>
+                <p className="text-ink-muted text-base leading-relaxed">
+                  Organizasyonun ihtiyacına göre, fiziki güvenliği tamamlayan ekipman ve teçhizatla
+                  ek tedbirler alınır.
+                </p>
+                <ul className="border-line mt-auto grid gap-2.5 border-t pt-5 sm:grid-cols-2">
+                  {yeditepeSecurity.eventEquipment.map((item) => (
+                    <li key={item} className="text-ink-muted flex items-start gap-2 text-sm">
+                      <Check className="text-brand-600 mt-0.5 size-3.5 shrink-0" aria-hidden />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
           </div>
         </Container>
       </Section>
@@ -298,6 +323,32 @@ export default function YeditepeSecurityPage() {
               </li>
             ))}
           </ol>
+        </Container>
+      </Section>
+
+      {/* --- Avantajlar (sözleşme tarafı) --- */}
+      <Section spacing="md" tone="raised">
+        <Container>
+          <SectionHeader
+            eyebrow="Sözleşme"
+            title="Hizmeti satın alan tarafın yükümlülüğü nerede biter?"
+            description="Aşağıdakiler pazarlama vaadi değil, hizmet sözleşmesinin konusudur."
+          />
+
+          <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {yeditepeSecurity.advantages.map((item, index) => (
+              <li
+                key={item.title}
+                className="border-line hover:border-brand-500 flex flex-col gap-3 border-t-2 pt-5 transition-colors"
+              >
+                <span className="font-display text-brand-600 text-sm font-bold">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="text-ink text-base font-semibold">{item.title}</h3>
+                <p className="text-ink-muted text-sm leading-relaxed">{item.description}</p>
+              </li>
+            ))}
+          </ul>
         </Container>
       </Section>
 
