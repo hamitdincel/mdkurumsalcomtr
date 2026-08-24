@@ -39,9 +39,8 @@ export const siteConfig = {
     /** tel: linki için sadece rakamlar */
     phoneRaw: '+905011300534',
     whatsapp: '905011300534',
-    /** TODO: Kurumsal e-posta doğrulanmalı. */
-    email: 'info@mdkurumsal.com.tr',
-    salesEmail: 'info@mdkurumsal.com.tr',
+    email: 'info@mdkurumsal.com',
+    salesEmail: 'info@mdkurumsal.com',
     /** Boş bırakılırsa iletişim sayfasında adres/harita bloğu gizlenir. */
     address: {
       street: 'Atatürk Mah. İkitelli Cad. Elmas Sk. Aras İş Merkezi No:1/4',
