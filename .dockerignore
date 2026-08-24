@@ -23,6 +23,7 @@ dist
 secrets/
 
 # yerel yükleme fallback'i (production'da S3 veya named volume kullanılır)
+data
 public/gallery/*/
 public/uploads
 

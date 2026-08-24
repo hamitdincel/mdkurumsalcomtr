@@ -33,10 +33,11 @@ export default async function MediaPage({
           <div className="flex items-start gap-3 rounded-md border border-warning/30 bg-warning-soft p-4 text-sm text-warning">
             <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
             <div>
-              <strong className="font-semibold">Yerel depolama kullanılıyor.</strong> Bu mod yalnızca
-              geliştirme içindir; sunucu yeniden dağıtıldığında dosyalar kaybolur. Production için
+              <strong className="font-semibold">Yerel depolama kullanılıyor.</strong> Dosyalar
+              sunucudaki veri dizinine yazılır. Bu dizin kalıcı bir birime (volume) bağlı değilse sunucu
+              yeniden dağıtıldığında dosyalar kaybolur. CDN üzerinden servis için
               <code className="mx-1">STORAGE_DRIVER=s3</code> ile Cloudflare R2 / AWS S3
-              yapılandırın.
+              yapılandırabilirsiniz.
             </div>
           </div>
         )}

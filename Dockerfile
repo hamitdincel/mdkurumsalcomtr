@@ -70,9 +70,13 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 
 # STORAGE_DRIVER=local kullanılıyorsa buraya named volume bağlanır.
+# Dizin public/ ALTINDA DEĞİLDİR: Next.js production'da public/ içeriğini
+# açılışta bir kez tarar, çalışma anında yazılan dosyaları servis etmez.
+# Dosyalar /medya/... route handler'ı üzerinden sunulur.
+#
 # Dizin önceden nextjs kullanıcısına ait olmalı, aksi halde volume root'a
 # ait olarak oluşur ve yükleme "permission denied" ile başarısız olur.
-RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public/uploads
+RUN mkdir -p /app/data/uploads && chown -R nextjs:nodejs /app/data/uploads
 
 USER nextjs
 EXPOSE 3000

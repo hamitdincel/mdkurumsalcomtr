@@ -60,10 +60,9 @@ blob-report/
 .stylelintcache
 
 # Panelden yüklenen medya (STORAGE_DRIVER=local).
-# Yükleme hedefi her zaman bir alt klasördür:
-#   public/gallery/<klasör>/<YYYYAA>/<uuid>.<ext>
-# Bu yüzden yalnızca alt klasörler yok sayılır; public/gallery/ kökündeki
-# sabit görseller (ör. burhanbelirimza.png) versiyonlanmaya devam eder.
+# Güncel hedef: data/uploads (LOCAL_STORAGE_DIR ile değiştirilebilir).
+data/
+# eski hedefler — mevcut kurulumlardaki dosyalar için korunuyor
 public/gallery/*/
 public/uploads/
 

@@ -1,8 +1,9 @@
-import { mkdir, writeFile } from 'node:fs/promises'
-import { dirname, join } from 'node:path'
+import { mkdir, unlink, writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
 import { PutObjectCommand, S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { env } from '@/config/env'
 import { buildObjectKey } from '@/lib/security/upload'
+import { LOCAL_MEDIA_PREFIX, resolveLocalPath } from './local'
 
 export type StoredFile = {
   url: string
@@ -32,9 +33,9 @@ function getS3(): S3Client {
  * Dosyayı yapılandırılmış depolama sağlayıcısına yükler.
  *
  * - STORAGE_DRIVER=s3   → Cloudflare R2 / AWS S3 / MinIO
- * - STORAGE_DRIVER=local→ public/gallery (Next.js yalnızca public/ altını
- *   servis ettiği için yüklenen dosyalar buraya yazılır; depo kökündeki bir
- *   klasöre yazılsalardı hiçbir URL'den açılamazlardı)
+ * - STORAGE_DRIVER=local→ public/ dışındaki veri dizini (bkz. ./local.ts).
+ *   Dosyalar `/medya/...` route handler'ı ile servis edilir; public/ altına
+ *   yazılsalardı sunucu yeniden başlatılana kadar 404 dönerlerdi.
  */
 export async function uploadFile(file: File, folder = 'genel'): Promise<StoredFile> {
   const key = buildObjectKey(folder, file)
@@ -63,12 +64,14 @@ export async function uploadFile(file: File, folder = 'genel'): Promise<StoredFi
     }
   }
 
-  const target = join(process.cwd(), 'public', 'gallery', key)
+  const target = resolveLocalPath(key)
+  if (!target) throw new Error('Geçersiz dosya anahtarı.')
+
   await mkdir(dirname(target), { recursive: true })
   await writeFile(target, buffer)
 
   return {
-    url: `/gallery/${key}`,
+    url: `${LOCAL_MEDIA_PREFIX}/${key}`,
     key,
     filename: file.name,
     mimeType: file.type,
@@ -77,6 +80,15 @@ export async function uploadFile(file: File, folder = 'genel'): Promise<StoredFi
 }
 
 export async function deleteFile(key: string): Promise<void> {
-  if (env.STORAGE_DRIVER !== 's3' || !env.S3_BUCKET) return
-  await getS3().send(new DeleteObjectCommand({ Bucket: env.S3_BUCKET, Key: key }))
+  if (env.STORAGE_DRIVER === 's3') {
+    if (!env.S3_BUCKET) return
+    await getS3().send(new DeleteObjectCommand({ Bucket: env.S3_BUCKET, Key: key }))
+    return
+  }
+
+  const target = resolveLocalPath(key)
+  if (!target) return
+
+  // Dosya zaten yoksa (ör. eski /uploads kayıtları) sessizce geçilir.
+  await unlink(target).catch(() => undefined)
 }

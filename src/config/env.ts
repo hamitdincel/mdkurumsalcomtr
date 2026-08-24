@@ -29,6 +29,9 @@ const serverSchema = z.object({
   TURNSTILE_SECRET_KEY: z.string().optional(),
 
   STORAGE_DRIVER: z.enum(['s3', 'local']).default('local'),
+  // STORAGE_DRIVER=local: yüklemelerin yazılacağı dizin. public/ ALTINDA
+  // OLMAMALI (bkz. src/lib/storage/local.ts). Boşsa <proje>/data/uploads.
+  LOCAL_STORAGE_DIR: z.string().optional(),
   S3_ENDPOINT: z.string().optional(),
   S3_REGION: z.string().default('auto'),
   S3_BUCKET: z.string().optional(),

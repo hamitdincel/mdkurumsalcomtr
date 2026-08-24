@@ -53,11 +53,11 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-drone}:${POSTGRES_PASSWORD:-drone}@db:5432/${POSTGRES_DB:-drone}?schema=public
     volumes:
-      # STORAGE_DRIVER=local ise yüklenen görseller burada kalıcı olur.
-      # Production'da S3/R2 önerilir (STORAGE_DRIVER=s3); bu volume yalnızca
-      # local sürücüyle çalışıldığında container restart'ında veri kaybını
-      # önlemek içindir.
-      - drone_uploads:/app/public/uploads
+      # STORAGE_DRIVER=local ise yüklenen dosyalar burada kalıcı olur.
+      # Yol public/ altında DEĞİLDİR; dosyalar /medya/... route handler'ı ile
+      # servis edilir (bkz. src/lib/storage/local.ts). Bu volume olmadan
+      # yüklenenler container her yeniden oluşturulduğunda kaybolur.
+      - drone_uploads:/app/data/uploads
     ports:
       - '3000:3000'
 
