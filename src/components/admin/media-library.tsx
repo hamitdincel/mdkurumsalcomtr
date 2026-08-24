@@ -4,9 +4,10 @@ import * as React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Copy, Loader2, Trash2, Upload } from 'lucide-react'
+import { Copy, Trash2 } from 'lucide-react'
 import { deleteMediaAction, uploadMediaAction } from '@/actions/media-actions'
-import { MAX_UPLOAD_BYTES } from '@/lib/security/upload-constants'
+import { UploadDropzone } from '@/components/admin/upload-dropzone'
+import { validateUpload } from '@/lib/security/upload-constants'
 import { cn, formatBytes, formatDate } from '@/lib/utils'
 
 type Asset = {
@@ -34,19 +35,18 @@ export function MediaLibrary({
   const [error, setError] = React.useState<string | null>(null)
   const [copied, setCopied] = React.useState<string | null>(null)
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? [])
+  const handleUpload = async (files: File[]) => {
     if (files.length === 0) return
-
-    const input = event.target
 
     setError(null)
     setUploading(true)
 
     try {
       for (const file of files) {
-        if (file.size > MAX_UPLOAD_BYTES) {
-          setError(`"${file.name}" 15 MB sınırını aşıyor.`)
+        // Sunucudaki kurallarla birebir aynı kontrol; kullanıcı sebebi hemen görür.
+        const invalid = validateUpload(file)
+        if (invalid) {
+          setError(invalid.message)
           continue
         }
 
@@ -59,8 +59,8 @@ export function MediaLibrary({
           if (!result.ok) setError(result.error)
         } catch (uploadError) {
           // Action'ın kendisi patlarsa (ağ hatası, gövde boyutu sınırı) hata
-          // yakalanmazsa arayüz sonsuza kadar "Yükleniyor…" durumunda kalır ve
-          // kullanıcı hiçbir şey olmamış gibi görür.
+          // yakalanmazsa arayüz sonsuza kadar "Yükleniyor…" durumunda kalır,
+          // input disabled olduğu için düğme bir daha hiç açılmaz.
           console.error('[media] Yükleme başarısız:', uploadError)
           setError(
             `"${file.name}" yüklenemedi. Bağlantı koptu ya da sunucu dosyayı reddetti. Ayrıntı için tarayıcı konsoluna bakın.`,
@@ -69,7 +69,6 @@ export function MediaLibrary({
       }
     } finally {
       setUploading(false)
-      input.value = ''
       router.refresh()
     }
   }
@@ -93,22 +92,12 @@ export function MediaLibrary({
 
   return (
     <div className="flex flex-col gap-6">
-      <label className="flex cursor-pointer items-center justify-center gap-2.5 rounded-md border border-dashed border-line-strong bg-surface-raised p-8 text-sm text-ink-muted transition-colors hover:border-brand-500 hover:text-ink">
-        {uploading ? (
-          <Loader2 className="size-5 animate-spin" aria-hidden />
-        ) : (
-          <Upload className="size-5" aria-hidden />
-        )}
-        {uploading ? 'Yükleniyor…' : 'Dosya yüklemek için tıklayın (birden fazla seçebilirsiniz)'}
-        <input
-          type="file"
-          multiple
-          accept="image/*,application/pdf"
-          onChange={handleUpload}
-          disabled={uploading}
-          className="sr-only"
-        />
-      </label>
+      <UploadDropzone
+        onFiles={handleUpload}
+        uploading={uploading}
+        multiple
+        idleLabel="Dosya yüklemek için tıklayın (birden fazla seçebilirsiniz)"
+      />
 
       {error && (
         <p role="alert" className="rounded-sm border border-danger/30 bg-danger-soft p-3 text-sm text-danger">

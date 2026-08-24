@@ -2,12 +2,13 @@
 
 import * as React from 'react'
 import Image from 'next/image'
-import { ImagePlus, Loader2, Upload, X } from 'lucide-react'
+import { ImagePlus, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { listMediaForPicker, uploadMediaAction } from '@/actions/media-actions'
-import { MAX_UPLOAD_BYTES } from '@/lib/security/upload-constants'
+import { UploadDropzone } from '@/components/admin/upload-dropzone'
+import { validateUpload } from '@/lib/security/upload-constants'
 
 type PickerAsset = { id: string; url: string; filename: string; alt: string | null }
 
@@ -45,15 +46,16 @@ export function MediaPickerField({
     setLoading(false)
   }
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const input = event.target
-    const file = input.files?.[0]
+  const handleUpload = async (files: File[]) => {
+    const file = files[0]
     if (!file) return
 
     setUploadError(null)
 
-    if (file.size > MAX_UPLOAD_BYTES) {
-      setUploadError('Dosya 15 MB sınırını aşıyor.')
+    // Sunucudaki kurallarla birebir aynı kontrol; kullanıcı sebebi hemen görür.
+    const invalid = validateUpload(file)
+    if (invalid) {
+      setUploadError(invalid.message)
       return
     }
 
@@ -81,7 +83,6 @@ export function MediaPickerField({
       setUploadError(UPLOAD_FAILED_MESSAGE)
     } finally {
       setUploading(false)
-      input.value = ''
     }
   }
 
@@ -143,21 +144,12 @@ export function MediaPickerField({
           <DialogTitle className="text-lg font-semibold text-ink">Medya Kütüphanesi</DialogTitle>
 
           <div className="mt-5 flex flex-col gap-5">
-            <label className="flex cursor-pointer items-center justify-center gap-2 rounded-sm border border-dashed border-line-strong bg-surface-sunken/50 p-5 text-sm text-ink-muted transition-colors hover:border-brand-500">
-              {uploading ? (
-                <Loader2 className="size-4 animate-spin" aria-hidden />
-              ) : (
-                <Upload className="size-4" aria-hidden />
-              )}
-              {uploading ? 'Yükleniyor…' : 'Yeni dosya yükle'}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleUpload}
-                disabled={uploading}
-                className="sr-only"
-              />
-            </label>
+            <UploadDropzone
+              onFiles={handleUpload}
+              uploading={uploading}
+              idleLabel="Yeni dosya yükle"
+              className="p-5"
+            />
 
             {uploadError && (
               <p role="alert" className="text-sm text-danger">
