@@ -54,28 +54,28 @@ export function ServiceCard({
     return (
       <article
         className={cn(
-          'group relative flex flex-col justify-between gap-8 overflow-hidden rounded-md border border-line bg-surface-raised p-7 transition-colors duration-300 hover:border-line-strong',
+          'group border-line bg-surface-raised hover:border-line-strong relative flex flex-col justify-between gap-8 overflow-hidden rounded-md border p-7 transition-colors duration-300',
           className,
         )}
       >
         <span
           aria-hidden
-          className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-500 to-signal transition-transform duration-300 group-hover:scale-x-100"
+          className="from-brand-500 to-signal absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r transition-transform duration-300 group-hover:scale-x-100"
         />
 
         <div className="flex items-start justify-between gap-4">
-          <Icon name={icon} className="size-9 text-brand-600" />
+          <Icon name={icon} className="text-brand-600 size-9" />
           {number && <span className="tech-label text-ink-subtle">{number}</span>}
         </div>
 
         <div className="flex flex-col gap-3">
-          <h3 className="text-xl leading-snug font-semibold text-ink">
+          <h3 className="text-ink text-xl leading-snug font-semibold">
             <Link href={`/hizmetler/${slug}`} className="after:absolute after:inset-0">
               {title}
             </Link>
           </h3>
-          <p className="text-base leading-relaxed text-ink-muted">{shortDescription}</p>
-          <span className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600">
+          <p className="text-ink-muted text-base leading-relaxed">{shortDescription}</p>
+          <span className="text-brand-600 mt-1 inline-flex items-center gap-1.5 text-sm font-medium">
             Detayları İncele
             <ArrowUpRight
               className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -90,7 +90,7 @@ export function ServiceCard({
   return (
     <article
       className={cn(
-        'group relative isolate flex overflow-hidden rounded-md bg-onyx',
+        'group bg-onyx relative isolate flex overflow-hidden rounded-md',
         featured ? 'min-h-[26rem]' : 'min-h-[24rem]',
         className,
       )}
@@ -107,24 +107,36 @@ export function ServiceCard({
       {/* Hover'da marka tonu */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-brand-500/0 transition-colors duration-500 group-hover:bg-brand-500/10"
+        className="bg-brand-500/0 group-hover:bg-brand-500/10 absolute inset-0 transition-colors duration-500"
       />
       {/* Accent kenar */}
       <span
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-500 to-signal transition-transform duration-500 group-hover:scale-x-100"
+        className="from-brand-500 to-signal absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r transition-transform duration-500 group-hover:scale-x-100"
       />
 
+      {/*
+        AÇIKLAMA YOK, KARARTMA YALNIZCA BU BANTTA.
+        Kartta numara, başlık ve ok var; açıklama metni hizmet detayında.
+        Karartma fotoğrafın tamamına değil, yalnızca bu satırın arkasına
+        uygulanır ve `soft` yoğunlukta — fotoğraf belirgin biçimde kararmaz
+        ama başlık ile ok butonu parlak bir zemine denk geldiğinde kaybolmaz.
+        Metin gölgesi ikinci kat destek olarak duruyor.
+      */}
       <div className="relative mt-auto w-full">
-        <MediaScrim />
+        <MediaScrim soft />
 
         <div className="relative flex items-end justify-between gap-6 p-6 md:p-7">
           <div className="flex flex-col gap-2.5">
-            {number && <span className="tech-label text-signal">{number}</span>}
+            {number && (
+              <span className="tech-label text-signal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                {number}
+              </span>
+            )}
 
             <h3
               className={cn(
-                'leading-snug font-semibold text-white',
+                'leading-snug font-semibold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]',
                 featured ? 'text-2xl md:text-3xl' : 'text-xl',
               )}
             >
@@ -132,23 +144,9 @@ export function ServiceCard({
                 {title}
               </Link>
             </h3>
-
-            {/*
-              Dar kartta açıklama 2 satırla sınırlı. Sınırsız bırakıldığında
-              beş satıra sarıp kartı bir metin duvarına çeviriyor, fotoğraftan
-              geriye bir şey kalmıyordu. Tam metin hizmet detayında zaten var.
-            */}
-            <p
-              className={cn(
-                'max-w-md text-sm leading-relaxed text-ink-on-dark-muted',
-                featured ? 'block' : 'hidden md:line-clamp-2',
-              )}
-            >
-              {shortDescription}
-            </p>
           </div>
 
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-white/25 text-white transition-all duration-300 group-hover:border-signal group-hover:bg-signal/15">
+          <span className="group-hover:border-signal group-hover:bg-signal/15 flex size-11 shrink-0 items-center justify-center rounded-sm border border-white/45 text-white transition-all duration-300">
             <ArrowUpRight
               className="size-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               aria-hidden

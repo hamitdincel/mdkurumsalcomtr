@@ -6,6 +6,12 @@ type MediaScrimProps = {
    * hero    : metin SOL SÜTUNDA + üstte saydam header → yatay yıkama
    */
   variant?: 'caption' | 'hero'
+  /**
+   * Caption varyantını hafifletir. Fotoğrafın kendisi öne çıksın istenen
+   * yerlerde kullanılır: metin okunacak kadar taban alır ama görsel
+   * belirgin biçimde kararmaz.
+   */
+  soft?: boolean
   className?: string
 }
 
@@ -24,7 +30,7 @@ type MediaScrimProps = {
  * görünse de ikinci katmanla çarpılınca görselin en parlak yerini bile
  * soluklaştırıyordu.
  */
-export function MediaScrim({ variant = 'caption', className }: MediaScrimProps) {
+export function MediaScrim({ variant = 'caption', soft, className }: MediaScrimProps) {
   if (variant === 'hero') {
     return (
       <div aria-hidden className={cn('pointer-events-none absolute inset-0', className)}>
@@ -36,7 +42,7 @@ export function MediaScrim({ variant = 'caption', className }: MediaScrimProps) 
           bilinçli olarak atmosferik bir zemine iner: üstte bile %45 taban var,
           ama eski kurulumun %90+ bileşkesinin çok altında.
         */}
-        <div className="absolute inset-0 bg-gradient-to-t from-scrim/92 from-0% via-scrim/72 via-45% to-scrim/45 md:hidden" />
+        <div className="from-scrim/92 via-scrim/72 to-scrim/45 absolute inset-0 bg-gradient-to-t from-0% via-45% md:hidden" />
 
         {/*
           md+ — ana katman YATAY.
@@ -45,11 +51,11 @@ export function MediaScrim({ variant = 'caption', className }: MediaScrimProps) 
           üstünden altına uzanır. Yıkama metnin bittiği ~%75'e kadar taşır, sağ
           çeyrek fotoğrafa bırakılır.
         */}
-        <div className="absolute inset-0 hidden bg-gradient-to-r from-scrim/85 from-0% via-scrim/55 via-38% to-transparent to-75% md:block" />
+        <div className="from-scrim/85 via-scrim/55 absolute inset-0 hidden bg-gradient-to-r from-0% via-38% to-transparent to-75% md:block" />
         {/* Alt taban: tam genişlikteki meta/CTA satırını ve alt kenarı oturtur. */}
-        <div className="absolute inset-0 hidden bg-gradient-to-t from-scrim/70 from-0% via-scrim/25 via-30% to-transparent to-60% md:block" />
+        <div className="from-scrim/70 via-scrim/25 absolute inset-0 hidden bg-gradient-to-t from-0% via-30% to-transparent to-60% md:block" />
         {/* Üst bant: header hero üzerinde saydam ve beyaz metinlidir. */}
-        <div className="absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b from-scrim/70 via-scrim/40 via-45% to-transparent md:block" />
+        <div className="from-scrim/70 via-scrim/40 absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b via-45% to-transparent md:block" />
       </div>
     )
   }
@@ -76,13 +82,17 @@ export function MediaScrim({ variant = 'caption', className }: MediaScrimProps) 
       <div
         aria-hidden
         className={cn(
-          'pointer-events-none absolute inset-0 bg-gradient-to-t from-scrim/95 to-scrim/80',
+          'pointer-events-none absolute inset-0 bg-gradient-to-t',
+          soft ? 'from-scrim/70 to-scrim/45' : 'from-scrim/95 to-scrim/80',
           className,
         )}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-full h-20 bg-gradient-to-t from-scrim/80 to-transparent"
+        className={cn(
+          'pointer-events-none absolute inset-x-0 bottom-full bg-gradient-to-t to-transparent',
+          soft ? 'from-scrim/45 h-14' : 'from-scrim/80 h-20',
+        )}
       />
     </>
   )
