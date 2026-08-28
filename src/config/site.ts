@@ -43,7 +43,7 @@ export const siteConfig = {
     salesEmail: 'info@mdkurumsal.com',
     /** Boş bırakılırsa iletişim sayfasında adres/harita bloğu gizlenir. */
     address: {
-      street: 'Atatürk Mah. İkitelli Cad. Elmas Sk. Aras İş Merkezi No:1/4',
+      street: 'Atatürk Mahallesi İkitelli Caddesi Aras Apartmanı 17/C',
       district: 'Küçükçekmece',
       city: 'İstanbul',
       postalCode: '',
