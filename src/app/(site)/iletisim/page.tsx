@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { siteConfig } from '@/config/site'
 import Link from 'next/link'
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 import { getSettings } from '@/services/settings-service'
@@ -52,7 +53,7 @@ export default async function ContactPage() {
                     href={`tel:${toTelHref(settings.phone)}`}
                     event="phone_click"
                     eventParams={{ location: 'contact_page' }}
-                    className="text-base font-medium text-ink hover:text-brand-600"
+                    className="text-ink hover:text-brand-600 text-base font-medium"
                   >
                     {settings.phone}
                   </TrackedLink>
@@ -65,7 +66,7 @@ export default async function ContactPage() {
                     rel="noopener noreferrer"
                     event="whatsapp_click"
                     eventParams={{ location: 'contact_page' }}
-                    className="text-base font-medium text-ink hover:text-brand-600"
+                    className="text-ink hover:text-brand-600 text-base font-medium"
                   >
                     Mesaj gönder
                   </TrackedLink>
@@ -76,7 +77,7 @@ export default async function ContactPage() {
                     href={`mailto:${settings.email}`}
                     event="email_click"
                     eventParams={{ location: 'contact_page' }}
-                    className="text-base font-medium break-all text-ink hover:text-brand-600"
+                    className="text-ink hover:text-brand-600 text-base font-medium break-all"
                   >
                     {settings.email}
                   </TrackedLink>
@@ -84,7 +85,7 @@ export default async function ContactPage() {
 
                 {settings.hasAddress && (
                   <ContactRow icon={<MapPin className="size-5" aria-hidden />} label="Adres">
-                    <address className="text-base leading-relaxed font-medium text-ink not-italic">
+                    <address className="text-ink text-base leading-relaxed font-medium not-italic">
                       {address.street}
                       <br />
                       {[address.postalCode, address.district, address.city]
@@ -95,36 +96,56 @@ export default async function ContactPage() {
                 )}
 
                 {settings.workingHours && (
-                  <ContactRow icon={<Clock className="size-5" aria-hidden />} label="Çalışma Saatleri">
-                    <span className="text-base font-medium text-ink">{settings.workingHours}</span>
+                  <ContactRow
+                    icon={<Clock className="size-5" aria-hidden />}
+                    label="Çalışma Saatleri"
+                  >
+                    <span className="text-ink text-base font-medium">{settings.workingHours}</span>
                   </ContactRow>
                 )}
               </ul>
 
-              {/* Hizmet bölgeleri — yalnızca gerçek operasyon lokasyonları */}
+              {/*
+                Hizmet bölgeleri.
+                Panelden şehir girilmemişse ülke geneli hizmet veriliyor
+                demektir ve tek satırlık bir ifade gösterilir; şehir girilirse
+                kapsam daraltılmış sayılır ve liste basılır. Aynı ayrım
+                schema.org `areaServed` alanında da yapılır (bkz. schema.ts).
+              */}
+              {settings.serviceAreas.length === 0 && siteConfig.serviceCountry && (
+                <div className="border-line rounded-lg border p-6">
+                  <h2 className="text-ink text-sm font-semibold">Hizmet verdiğimiz bölgeler</h2>
+                  <p className="text-ink-muted mt-3 text-sm leading-relaxed">
+                    {siteConfig.serviceCountry} genelinde hizmet veriyoruz. Yapınızın bulunduğu
+                    lokasyon için keşif ve uygulama planını talebiniz sonrasında birlikte
+                    belirliyoruz.
+                  </p>
+                </div>
+              )}
+
               {settings.serviceAreas.length > 0 && (
-                <div className="rounded-lg border border-line p-6">
-                  <h2 className="text-sm font-semibold text-ink">Hizmet verdiğimiz bölgeler</h2>
+                <div className="border-line rounded-lg border p-6">
+                  <h2 className="text-ink text-sm font-semibold">Hizmet verdiğimiz bölgeler</h2>
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {settings.serviceAreas.map((city) => (
                       <li
                         key={city}
-                        className="rounded-xs bg-surface-sunken px-2.5 py-1 text-sm text-ink-muted"
+                        className="bg-surface-sunken text-ink-muted rounded-xs px-2.5 py-1 text-sm"
                       >
                         {city}
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-4 text-xs leading-relaxed text-ink-subtle">
+                  <p className="text-ink-subtle mt-4 text-xs leading-relaxed">
                     Listede olmayan bir lokasyon için talebinizi iletebilirsiniz; uygunluk
                     değerlendirilerek dönüş yapılır.
                   </p>
                 </div>
               )}
 
-              <div className="rounded-lg border border-line bg-surface-raised p-6">
-                <h2 className="text-base font-semibold text-ink">Teklif almak mı istiyorsunuz?</h2>
-                <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+              <div className="border-line bg-surface-raised rounded-lg border p-6">
+                <h2 className="text-ink text-base font-semibold">Teklif almak mı istiyorsunuz?</h2>
+                <p className="text-ink-muted mt-2 text-sm leading-relaxed">
                   Daha hızlı ve doğru bir teklif için teklif formunu kullanmanızı öneririz.
                 </p>
                 <Button asChild className="mt-4">
@@ -134,9 +155,9 @@ export default async function ContactPage() {
             </div>
 
             {/* Form */}
-            <div className="rounded-lg border border-line bg-surface-raised p-6 md:p-8">
-              <h2 className="text-xl font-semibold text-ink">Mesaj gönderin</h2>
-              <p className="mt-2 mb-6 text-sm text-ink-muted">
+            <div className="border-line bg-surface-raised rounded-lg border p-6 md:p-8">
+              <h2 className="text-ink text-xl font-semibold">Mesaj gönderin</h2>
+              <p className="text-ink-muted mt-2 mb-6 text-sm">
                 Formu doldurduğunuzda mesajınız ilgili ekibe iletilir.
               </p>
               <ContactForm turnstileSiteKey={publicEnv.turnstileSiteKey} />
@@ -147,7 +168,7 @@ export default async function ContactPage() {
 
       {/* Harita — yalnızca gerçek adres ve harita bağlantısı tanımlıysa */}
       {settings.hasAddress && settings.mapEmbedUrl && (
-        <Section spacing="none" className="border-t border-line">
+        <Section spacing="none" className="border-line border-t">
           <iframe
             src={settings.mapEmbedUrl}
             title="Ofis konumu haritası"
@@ -171,12 +192,12 @@ function ContactRow({
   children: React.ReactNode
 }) {
   return (
-    <li className="flex items-start gap-4 rounded-md border border-line bg-surface-raised p-5">
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-sm bg-brand-50 text-brand-600">
+    <li className="border-line bg-surface-raised flex items-start gap-4 rounded-md border p-5">
+      <span className="bg-brand-50 text-brand-600 flex size-11 shrink-0 items-center justify-center rounded-sm">
         {icon}
       </span>
       <div className="flex min-w-0 flex-col gap-0.5">
-        <span className="text-xs tracking-wide text-ink-subtle uppercase">{label}</span>
+        <span className="text-ink-subtle text-xs tracking-wide uppercase">{label}</span>
         {children}
       </div>
     </li>

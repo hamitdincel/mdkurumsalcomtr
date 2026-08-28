@@ -12,6 +12,21 @@ import { siteConfig, absoluteUrl, hasAddress } from '@/config/site'
 
 type JsonLdObject = Record<string, unknown>
 
+/**
+ * `areaServed` üretir.
+ * Şehir listesi doluysa o kullanılır (dar kapsam); boşsa ülke geneli yazılır.
+ * İkisi de yoksa alan hiç eklenmez — boş bir areaServed yanlış sinyal verir.
+ */
+function areaServed(): JsonLdObject[] | JsonLdObject | undefined {
+  if (siteConfig.serviceAreas.length > 0) {
+    return siteConfig.serviceAreas.map((city) => ({ '@type': 'City', name: city }))
+  }
+  if (siteConfig.serviceCountry) {
+    return { '@type': 'Country', name: siteConfig.serviceCountry }
+  }
+  return undefined
+}
+
 export function organizationSchema(): JsonLdObject {
   const address = siteConfig.contact.address
   const isLocalBusiness = hasAddress()
@@ -57,12 +72,8 @@ export function organizationSchema(): JsonLdObject {
     schema.sameAs = siteConfig.social.map((s) => s.href)
   }
 
-  if (siteConfig.serviceAreas.length > 0) {
-    schema.areaServed = siteConfig.serviceAreas.map((city) => ({
-      '@type': 'City',
-      name: city,
-    }))
-  }
+  const area = areaServed()
+  if (area) schema.areaServed = area
 
   return schema
 }
@@ -119,9 +130,8 @@ export function serviceSchema(input: {
 
   if (input.image) schema.image = input.image
 
-  if (siteConfig.serviceAreas.length > 0) {
-    schema.areaServed = siteConfig.serviceAreas.map((city) => ({ '@type': 'City', name: city }))
-  }
+  const area = areaServed()
+  if (area) schema.areaServed = area
 
   return schema
 }

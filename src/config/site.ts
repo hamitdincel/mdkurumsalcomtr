@@ -96,7 +96,17 @@ export const siteConfig = {
     certifications: [] as { name: string; issuer: string; documentUrl?: string }[],
   },
 
-  /** Hizmet verilen şehirler — yalnızca gerçekten operasyon yapılan lokasyonlar. */
+  /**
+   * Hizmet verilen coğrafya — schema.org `areaServed`.
+   *
+   * Ülke geneli hizmet veriliyor; 81 ili tek tek listelemek yerine Country
+   * tipi kullanılır. `serviceAreas` boş bırakıldığı sürece schema'ya bu değer
+   * yazılır. Panelden şehir eklenirse liste daha dar bir kapsam anlamına gelir
+   * ve önceliği o alır.
+   */
+  serviceCountry: 'Türkiye',
+
+  /** Hizmet verilen şehirler — yalnızca kapsam daraltılacaksa doldurulur. */
   serviceAreas: [] as string[],
 
   /** Varsayılan WhatsApp mesajı (sayfa bağlamına göre zenginleştirilir). */
