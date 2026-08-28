@@ -1,4 +1,5 @@
 import { siteConfig, absoluteUrl, hasAddress } from '@/config/site'
+import { siteImages } from '@/config/images'
 
 /**
  * JSON-LD üretimi.
@@ -39,6 +40,7 @@ export function organizationSchema(): JsonLdObject {
     url: siteConfig.url,
     description: siteConfig.description,
     image: absoluteUrl(siteConfig.ogImage),
+    logo: absoluteUrl(siteImages.logo),
   }
 
   if (siteConfig.legalName && !siteConfig.legalName.startsWith('TODO')) {

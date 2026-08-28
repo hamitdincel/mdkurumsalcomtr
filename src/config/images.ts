@@ -25,6 +25,14 @@ export const siteImages = {
   ogDefault: '/og/default.jpg',
 
   /**
+   * Marka logosu — schema.org Organization/LocalBusiness `logo` alanı.
+   * src/app/icon.png ile aynı dosya (512x512, kare); Next bu dosyayı
+   * /icon.png yolundan servis eder. Google bilgi panelinde bu görseli
+   * kullanır, `image` alanı yerine geçmez — ikisi ayrı ayrı gerekir.
+   */
+  logo: '/icon.png',
+
+  /**
    * Grup şirketi logosu — Yeditepe Özel Güvenlik (512×512, saydam zeminli).
    * Kaynak JPEG beyaz zeminliydi; dış beyaz alan saydamlaştırılıp kırpıldı,
    * kalkanın içindeki beyaz "ÖZEL GÜVENLİK" yazısı korundu.

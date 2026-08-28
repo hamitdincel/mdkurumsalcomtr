@@ -31,7 +31,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings()
 
   return buildMetadata({
-    title: `${settings.brandName} — Drone ile Dış Cephe ve Yüzey Temizliği`,
+    /*
+     * Marka adı BAŞA YAZILMAZ. layout.tsx'teki `%s | MD Kurumsal` şablonu
+     * zaten sona ekliyordu; ikisi birleşince başlık
+     * "MD Kurumsal — ... | MD Kurumsal" oluyor ve Google sonucu kesiyordu.
+     * Hedef kelime de en başta duruyor, bu sıralama daha güçlü sinyal.
+     */
+    title: 'Drone ile Dış Cephe ve Yüzey Temizliği',
     description:
       'Drone destekli sistemlerle dış cephe, cam yüzey, güneş paneli ve çatı temizliği. Keşif, operasyon planlaması ve kontrollü uygulama süreciyle kurumsal temizlik çözümleri.',
     path: '/',
